@@ -1,14 +1,2 @@
-# Group-8-Final-Vignette-
-root directory
-|-- data
-    |-- raw
-    |-- processed
-|-- scripts
-    |-- drafts
-    |-- vignette-script.R
-|-- img
-    |-- fig1.png
-    |-- fig2.png
-|-- vignette.qmd
-|-- vignette.html
-|-- README.md
+# Group-8-Vignette-Clustering-Methods
+This is a vignette focused on 3 clustering methods in R: hierarchical clustering, distribution-based clustering, and density-based clustering. They will be illustrated on an unsupervised country classification data.
