@@ -1,1 +1,14 @@
 # Group-8-Final-Vignette-
+root directory
+|-- data
+    |-- raw
+    |-- processed
+|-- scripts
+    |-- drafts
+    |-- vignette-script.R
+|-- img
+    |-- fig1.png
+    |-- fig2.png
+|-- vignette.qmd
+|-- vignette.html
+|-- README.md
