@@ -51,7 +51,7 @@ library(dendextend)
 library(factoextra)
 
 # read data
-countries <- read.csv("data/Country-data.csv")
+countries <- read.csv("../data/country-data.csv")
 
 df <- countries %>%
   column_to_rownames(var = "country")
