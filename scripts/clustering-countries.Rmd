@@ -1,0 +1,287 @@
+---
+title: "Clustering Analysis on Country Data"
+output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+<style>
+pre code, pre, code {
+  white-space: pre !important;
+  overflow-x: scroll !important;
+  word-break: keep-all !important;
+  word-wrap: initial !important;
+}
+</style>
+
+```{r, include=FALSE}
+# set code chunk options
+knitr::opts_chunk$set(echo = TRUE, 
+                      fig.align = 'center',
+                      cache = TRUE)
+
+# allow scrolling for long code
+options(width = 200)
+```
+
+# Setup
+
+**Objective:** We want to categorize countries using socio-economic and health factors that determine the overall development of each country (from the [Kaggle description](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)).
+
+We load in the necessary packages and the [country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data).
+
+```{r, message=FALSE}
+# load packages
+library(tidyverse)
+library(dendextend)
+library(factoextra)
+library(mclust)
+
+# read data
+countries <- read.csv("../data/country-data.csv")
+
+# use the countries as the row names
+df <- countries %>%
+  column_to_rownames(var = "country")
+```
+
+# Hierarchical clustering
+
+[Add info here]
+
+## Optimal number of clusters
+
+**Elbow method**
+
+- Looks at the total within-cluster sum of squares (WSS)
+- Similar to proportion of variance explained (PVE) plot in PCA
+- The optimal number of clusters is the point where the plot appears to bend
+- Lower WSS = better
+
+```{r}
+# best = 4 clusters (not much improvement after 4 clusters)
+fviz_nbclust(df, 
+             hcut, 
+             method = "wss")
+```
+
+**Average silhouette method**
+
+- Determines how well each object lies within its cluster
+- Higher average silhouette = better
+
+```{r}
+# best = 2 clusters
+fviz_nbclust(df, 
+             hcut, 
+             method = "silhouette")
+```
+
+**Gap statistic method**
+
+- Compares the total within intra-cluster variation for different values of $k$ with randomly drawn samples
+- Choose $k$ such that the gap statistic is within 1 standard deviation of the gap statistic at $k + 1$
+- Higher gap statistic = better
+
+```{r}
+library(cluster)
+set.seed(123)
+gap_stat <- clusGap(df,
+                    hcut,
+                    K.max = 10, # number of clusters to consider
+                    B = 500)    # number of samples to bootstrap
+
+# best = 3 clusters
+fviz_gap_stat(gap_stat)
+```
+
+## Dendrograms {.tabset .tabset-dropdown}
+
+To visually show the hierarchical clusters, we can plot dendrograms for each of the following clusters.
+
+### $k = 2$ clusters
+
+```{r, fig.height=20}
+df %>%
+  scale() %>%
+  dist() %>%
+  hclust() %>%
+  as.dendrogram() %>%
+  set("labels_cex", 0.4) %>%
+  color_branches(k = 2) %>% 
+  color_labels(k = 2) %>%
+  plot(horiz = TRUE)
+```
+
+### $k = 3$ clusters
+
+```{r, fig.height=20}
+df %>%
+  scale() %>%
+  dist() %>%
+  hclust() %>%
+  as.dendrogram() %>%
+  set("labels_cex", 0.4) %>%
+  color_branches(k = 3) %>% 
+  color_labels(k = 3) %>%
+  plot(horiz = TRUE)
+```
+
+### $k = 4$ clusters
+
+```{r, fig.height=20}
+df %>%
+  scale() %>%
+  dist() %>%
+  hclust() %>%
+  as.dendrogram() %>%
+  set("labels_cex", 0.4) %>%
+  color_branches(k = 4) %>% 
+  color_labels(k = 4) %>%
+  plot(horiz = TRUE)
+```
+
+## Map clusters {.tabset .tabset-dropdown}
+
+The dendrograms can be difficult to read since there are a lot of countries -- `r length(row.names(df))` in total! Luckily, since we are working with countries, we can also plot the clusters onto a world map. Below are some of the functions that we'll use to make our maps.
+
+```{r}
+# perform hierarchical clustering and get k clusters
+k_hclust <- function(.df, k) {
+  .df %>%
+    scale() %>%
+    dist() %>%
+    hclust() %>%
+    cutree(k)
+}
+
+# turn the cluster output into a dataframe
+clust_to_df <- function(.clust) {
+  .clust %>%
+    rbind() %>%
+    t() %>% 
+    data.frame() %>%
+    rename(cluster = 1) %>%
+    mutate(cluster = factor(cluster)) %>%
+    rownames_to_column("country")
+}
+
+# rename countries to be able to plot them
+rename_countries <- function(.df) {
+  .df %>%
+    mutate(across('country', str_replace, 'Antigua and Barbuda', 'Antigua'),
+           across('country', str_replace, 'Congo, Dem. Rep.', 'Democratic Republic of the Congo'),
+           across('country', str_replace, 'Congo, Rep.', 'Republic of Congo'),
+           across('country', str_replace, 'Cote d\'Ivoire', 'Ivory Coast'),
+           across('country', str_replace, 'Kyrgyz Republic', 'Kyrgyzstan'),
+           across('country', str_replace, 'Lao', 'Laos'),
+           across('country', str_replace, 'Macedonia, FYR', 'North Macedonia'),
+           across('country', str_replace, 'Micronesia, Fed. Sts.', 'Micronesia'),
+           across('country', str_replace, 'Slovak Republic', 'Slovakia'),
+           across('country', str_replace, 'St. Vincent and the Grenadines', 'Saint Vincent'),
+           across('country', str_replace, 'United Kingdom', 'UK'),
+           across('country', str_replace, 'United States', 'USA')) %>%
+    add_row(country = 'Barbuda', cluster = filter(., country == 'Antigua') %>% getElement('cluster')) %>%
+    add_row(country = 'Grenadines', cluster = filter(., country == 'Saint Vincent') %>% getElement('cluster'))
+}
+
+# plots the clusters onto the world map
+plot_map <- function(.df) {
+  world <- map_data("world")
+  
+  world %>%
+    left_join(.df, by = c("region" = "country")) %>%
+    ggplot() + 
+    geom_polygon(aes(x = long, y = lat, fill = cluster, group = group),
+                 color = "white") +
+    coord_fixed(1.3)
+}
+```
+
+If you're curious, this is how we determined what names to change.
+
+```{r}
+# get world data
+world <- map_data("world")
+
+# get unique countries in the df and world dataframes
+unique_countries_df <- row.names(df) %>% unique() %>% sort()
+unique_countries_world <- world$region %>% unique() %>% sort()
+
+# get all countries that occur in df but not in world
+setdiff(unique_countries_df, unique_countries_world)
+```
+
+Use the dropdown menu choose the number of clusters obtained from hierarchical clustering.
+
+### $k = 2$ clusters
+
+```{r}
+df %>%
+  k_hclust(2) %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
+```
+
+### $k = 3$ clusters
+
+```{r}
+df %>%
+  k_hclust(3) %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
+```
+
+### $k = 4$ clusters
+
+```{r}
+df %>%
+  k_hclust(4) %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
+```
+
+# Model-based clustering
+
+[Add info here]
+
+## Choosing the best model
+
+```{r}
+mb <- Mclust(df)
+summary(mb)
+```
+
+```{r}
+plot(mb, what = c("classification"))
+```
+
+## Map clusters
+
+Note that some countries are not included in the country dataset, such as Mexico and Greenland.
+
+```{r}
+mb$classification %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
+```
+
+# References
+
+- Dataset
+    - [Country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
+- Hierarchical clustering
+    - [ISLR textbook](https://trevorhastie.github.io/ISLR/ISLR%20Seventh%20Printing.pdf)
+    - [Using the `hclust()` function](https://r-charts.com/part-whole/hclust/)
+    - [Customization for `hclust()`](https://stackoverflow.com/questions/55207216/r-rect-hclust-rectangles-too-high-in-dendogram)
+    - [Determining the optimal number of clusters](https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/)
+    - [Using the `fviz_nbclust()` and `fviz_gap_stat()` functions](https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html)
+- Model-based clustering
+    - [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
+    - [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
