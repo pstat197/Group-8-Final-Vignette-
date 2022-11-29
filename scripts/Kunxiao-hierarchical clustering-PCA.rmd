@@ -1,5 +1,5 @@
 ---
-title: "Kunxiao Gao-hierarchical clustering"
+title: "Kunxiao Gao-hierarchical clustering with PCA"
 author: "Kunxiao Gao"
 date: "2022-11-29"
 output: html_document
@@ -15,6 +15,7 @@ library(e1071)
 ```
 
 ```{r}
+load("processed_data.RData")
 ##summary the information of the dataframe
 summary(data)
 ##Drop the country column
@@ -38,7 +39,8 @@ plot(cumsum(pve), xlab="Principal Component ",
 
 ```{r dendogram, fig.height=8}
 ##To perform hierarchical clustering, we can use function `hclust()` by passing the distance matrix into it. By default, `hclust()` uses complete linkage (defaulting `method="complete"`). We can use single linkage (by specifying `method="single"`) and average linkage (`method="average"`) too. Naturally, the first step is calculating a distance matrix. Here we use the default method:"Euclidean". The Hierarchical clustering is shown below.
-data.dist = dist(data)
+pr.x <- pr.out$x
+data.dist = dist(pr.x)
 set.seed(123)
 data.hclust.complete = hclust(data.dist)
 clus = cutree(data.hclust.complete, 5)

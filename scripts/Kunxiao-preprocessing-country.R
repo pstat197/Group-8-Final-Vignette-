@@ -19,7 +19,7 @@ data <- raw_data %>%
   select(-4) ##Drop the original health after generating health-levels
 
 save(data,file = 'data/processed_data.RData')
-
+save(data,file = 'scripts/processed_data.RData')
 
 
 
