@@ -1,0 +1,51 @@
+---
+title: "Kunxiao Gao-hierarchical clustering"
+author: "Kunxiao Gao"
+date: "2022-11-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ROCR)
+library(ggridges)
+library(dendextend)
+library(e1071)
+```
+
+```{r}
+##summary the information of the dataframe
+summary(data)
+##Drop the country column
+data <- data[-1]
+```
+
+```{r}
+##Run PCA on the scaled and centered data without the last column(Health level)
+pr.out <- prcomp(data[-9],scale.=TRUE,center = TRUE)
+##The `prcomp()` function also outputs the standard deviation of each principal component.
+# The variance explained by each principal component is obtained by squaring these:
+pr.var=pr.out$sdev^2
+##To compute the proportion of variance explained by each principal component, we simply divide the variance explained by each principal component by the total variance explained by all eight principal components:
+pve=pr.var/sum(pr.var)
+plot(pve, xlab="Principal Component", 
+     ylab="Proportion of Variance Explained ", type='b')
+plot(cumsum(pve), xlab="Principal Component ", 
+     ylab=" Cumulative Proportion of Variance Explained ", ylim=c(0,1), type='b')
+```
+
+
+```{r dendogram, fig.height=8}
+##To perform hierarchical clustering, we can use function `hclust()` by passing the distance matrix into it. By default, `hclust()` uses complete linkage (defaulting `method="complete"`). We can use single linkage (by specifying `method="single"`) and average linkage (`method="average"`) too. Naturally, the first step is calculating a distance matrix. Here we use the default method:"Euclidean". The Hierarchical clustering is shown below.
+data.dist = dist(data)
+set.seed(123)
+data.hclust = hclust(data.dist)
+```
+
+```{r}
+
+```
+
+
+
