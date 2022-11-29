@@ -18,7 +18,7 @@ data <- raw_data %>%
   mutate(health_level=factor(health_level,levels=c("Low","Medium-Low","Medium","Medium-High","High"))) %>%
   select(-4) ##Drop the original health after generating health-levels
 
-
+save(data,file = 'data/processed_data.RData')
 
 
 
