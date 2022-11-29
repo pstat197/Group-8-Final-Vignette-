@@ -41,6 +41,8 @@ plot(cumsum(pve), xlab="Principal Component ",
 data.dist = dist(data)
 set.seed(123)
 data.hclust.complete = hclust(data.dist)
+clus = cutree(data.hclust.complete, 5)
+table(clus)
 ```
 
 
