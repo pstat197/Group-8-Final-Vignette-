@@ -1,6 +1,5 @@
-# Unsupervised Learning on Country Data
-
 ##Preprocessing
-raw_data <- read.csv("Country-data/Country-data.csv")
-save(raw_data,file = 'Country-data/raw_data.RData')
-load('Country-data/raw_data.RData')
+raw_data <- read.csv("data/country-data.csv")
+save(raw_data,file = 'data/raw_data.RData')
+load('data/raw_data.RData')
+
