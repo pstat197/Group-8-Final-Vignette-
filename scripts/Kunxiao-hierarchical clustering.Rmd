@@ -14,3 +14,64 @@ library(dendextend)
 library(e1071)
 ```
 
+```{r}
+load('processed_data.RData')
+##summary the information of the dataframe
+summary(data)
+##Drop the country column
+data <- data[-1]
+```
+
+```{r}
+## Since the distance will be used to do hierarchical clustering, we want to the difference of scale between different variables become smaller so that the scale will not largely affect the final results.
+sdata <- scale(data[-9],center = TRUE,scale = TRUE)
+```
+
+```{r dendogram, fig.height=8}
+##To perform hierarchical clustering, we can use function `hclust()` by passing the distance matrix into it. By default, `hclust()` uses complete linkage (defaulting `method="complete"`). We can use single linkage (by specifying `method="single"`) and average linkage (`method="average"`) too. Naturally, the first step is calculating a distance matrix. Here we use the default method:"Euclidean". The Hierarchical clustering is shown below.
+data.dist = dist(sdata)
+set.seed(123)
+data.hclust.complete = hclust(data.dist)
+clus = cutree(data.hclust.complete, 5)
+table(clus)
+```
+
+```{r fig.align="center", fig.height=10, fig.width=5}
+## dendrogram: branches colored by 5 groups
+dend1 = as.dendrogram(data.hclust.complete)
+# color branches and labels by 5 clusters
+dend1 = color_branches(dend1, k=5)
+dend1 = color_labels(dend1, k=5)
+# change label size 
+dend1 = set(dend1, "labels_cex", 0.5)
+# add true labels to observations
+dend1 = set_labels(dend1, labels=data$health_level[order.dendrogram(dend1)])
+# plot the dendrogram
+plot(dend1, horiz=T, main = "Dendrogram colored by five clusters.complete")
+```
+
+```{r dendogram, fig.height=8}
+##Now we try the average linkage (`method="average") and use the default method:"Euclidean". The Hierarchical clustering is shown below.
+set.seed(123)
+data.hclust.average = hclust(data.dist,method = "average")
+clus = cutree(data.hclust.average, 5)
+table(clus)
+```
+
+```{r}
+##Now we try the single linkage (`method="single") and use the default method:"Euclidean". The Hierarchical clustering is shown below.
+set.seed(123)
+data.hclust.single = hclust(data.dist,method = "single")
+clus = cutree(data.hclust.single, 5)
+table(clus)
+```
+
+
+
+
+
+
+
+
+
+
