@@ -272,6 +272,46 @@ mb$classification %>%
   plot_map()
 ```
 
+# Density-based clustering
+
+[Add info here]
+
+## Choosing the best model
+```{r}
+#install.packages("dbscan")
+library(dbscan)
+str(df)
+```
+
+```{r}
+df.matrix <- as.matrix(df)
+kNNdistplot(df.matrix, k=4)
+abline(h=6000, col="red")
+```
+```{r}
+set.seed(1)
+db <- dbscan(df, eps = 5000, minPts = 5)
+db
+```
+
+```{r}
+hullplot(df.matrix, db$cluster)
+```
+
+```{r}
+plot(db, df.matrix, main = "DBScan")
+```
+## Map clusters
+
+Note that some countries are not included in the country dataset, such as Mexico and Greenland.
+
+```{r}
+db$cluster %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
+```
+
 # References
 
 - Dataset
