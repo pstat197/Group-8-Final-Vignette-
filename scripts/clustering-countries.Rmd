@@ -199,7 +199,8 @@ plot_map <- function(.df) {
     ggplot() + 
     geom_polygon(aes(x = long, y = lat, fill = cluster, group = group),
                  color = "white") +
-    coord_fixed(1.3)
+    coord_fixed(1.3) +
+    theme(legend.position = "top")
 }
 ```
 
@@ -217,11 +218,11 @@ unique_countries_world <- world$region %>% unique() %>% sort()
 setdiff(unique_countries_df, unique_countries_world)
 ```
 
-Use the tabs to choose between different number of clusters obtained from hierarchical clustering. Note that some countries are not included in this dataset (shaded in gray), such as Mexico and Greenland.
+Use the tabs to choose between different numbers of clusters obtained from hierarchical clustering. Note that some countries are not included in this dataset (shaded in gray), such as Mexico and Greenland.
 
 ### $k = 2$ clusters
 
-```{r}
+```{r, out.width='150%'}
 df %>%
   k_hclust(2) %>%
   clust_to_df() %>%
@@ -231,7 +232,7 @@ df %>%
 
 ### $k = 3$ clusters
 
-```{r}
+```{r, out.width='150%'}
 df %>%
   k_hclust(3) %>%
   clust_to_df() %>%
@@ -241,7 +242,7 @@ df %>%
 
 ### $k = 4$ clusters
 
-```{r}
+```{r, out.width='150%'}
 df %>%
   k_hclust(4) %>%
   clust_to_df() %>%
@@ -287,7 +288,7 @@ To identify both the optimal model and number of clusters, the Bayesian Informat
 
 ### Run the algorithm
 
-May take a minute or two
+Run the code below (it may take a minute or two since it is trying all of the possible models using different numbers of clusters). The output includes the optimal model and number of clusters, along with how many observations are in each cluster.
 
 ```{r}
 mb <- Mclust(df)
@@ -296,23 +297,25 @@ summary(mb)
 
 ### Classification plots
 
-Plots between two variables
+We can see how the points are classified for each pair of variables in the dataset.
 
 ```{r}
-plot(mb, what = c("classification"))
+plot(mb, what = "classification")
 ```
 
 ### BIC plot
 
-Compare models at different numbers of clusters
+We can also compare all of the models at different numbers of clusters. Higher BIC suggests a better model.
 
 ```{r}
-plot(mb, what = c("BIC"))
+plot(mb, what = "BIC")
 ```
 
 ## Map clusters
 
-```{r}
+Like before, we plot our clusters onto the world map. Notice that we have more clusters here than we used hierachical clustering.
+
+```{r, out.width='150%'}
 mb$classification %>%
   clust_to_df() %>%
   rename_countries() %>%
@@ -353,11 +356,11 @@ fviz_cluster(db, df, geom = 'point')
 hullplot(df.matrix, db$cluster)
 ```
 
-```{r}
+```{r, include=FALSE}
 # plot(db, df, main = "DBScan")
 ```
 
-```{r}
+```{r, out.width='150%'}
 # add country names to clusters
 db_clust <- db$cluster
 names(db_clust) <- row.names(df)
