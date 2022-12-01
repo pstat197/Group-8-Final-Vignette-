@@ -400,3 +400,6 @@ db_clust %>%
     -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
     -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
 -   Density-based clustering
+
+To put just code in our R script:
+knitr::purl(input = 'clustering-countries.Rmd', output = 'clustering-countries.R')
