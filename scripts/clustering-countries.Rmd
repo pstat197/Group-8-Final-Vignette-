@@ -99,9 +99,11 @@ gap_stat <- clusGap(df,
 fviz_gap_stat(gap_stat)
 ```
 
-## Dendrograms {.tabset .tabset-dropdown}
+## Dendrograms {.tabset}
 
 To visually show the hierarchical clusters, we can plot dendrograms for each of the following clusters.
+
+[Identify changes]
 
 ### $k = 2$ clusters
 
@@ -145,7 +147,7 @@ df %>%
   plot(horiz = TRUE)
 ```
 
-## Map clusters {.tabset .tabset-dropdown}
+## Map clusters {.tabset}
 
 The dendrograms can be difficult to read since there are a lot of countries -- `r length(row.names(df))` in total! Luckily, since we are working with countries, we can also plot the clusters onto a world map. Below are some of the functions that we'll use to make our maps.
 
@@ -215,7 +217,7 @@ unique_countries_world <- world$region %>% unique() %>% sort()
 setdiff(unique_countries_df, unique_countries_world)
 ```
 
-Use the dropdown menu choose the number of clusters obtained from hierarchical clustering.
+Use the tabs to choose between different number of clusters obtained from hierarchical clustering. Note that some countries are not included in this dataset (shaded in gray), such as Mexico and Greenland.
 
 ### $k = 2$ clusters
 
@@ -281,30 +283,34 @@ Here are some visuals to accompany the table above (note that not all of the mod
 
 To identify both the optimal model and number of clusters, the Bayesian Information Criterion (BIC) is used since it penalizes models with more parameters, i.e. the "general" clusters are penalized more since they have more variability and thus require more parameters. Many combinations of different models and numbers and clusters are fit, and the combination that yields the maximum BIC is chosen as the "best" one.
 
-## Choosing the best model
+## Choosing the best model {.tabset}
 
-Run the algorithm (may take a minute or two)
+### Run the algorithm
+
+May take a minute or two
 
 ```{r}
 mb <- Mclust(df)
 summary(mb)
 ```
 
-Plots between pairs of variables
+### Classification plots
+
+Plots between two variables
 
 ```{r}
 plot(mb, what = c("classification"))
 ```
 
-BIC plot
+### BIC plot
+
+Compare models at different numbers of clusters
 
 ```{r}
 plot(mb, what = c("BIC"))
 ```
 
 ## Map clusters
-
-Note that some countries are not included in the country dataset, such as Mexico and Greenland.
 
 ```{r}
 mb$classification %>%
@@ -376,3 +382,4 @@ db_clust %>%
 -   Model-based clustering
     -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
     -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
+- Density-based clustering
