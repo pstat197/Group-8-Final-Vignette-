@@ -285,12 +285,12 @@ str(df)
 
 ```{r}
 df.matrix <- as.matrix(df)
-kNNdistplot(df.matrix, k=5)
+kNNdistplot(df.matrix, k=6)
 abline(h=5000, col="red")
 ```
 ```{r}
 set.seed(1)
-db <- dbscan(df, eps = 5000, minPts = 5)
+db <- dbscan(df, eps = 5000, minPts = 6)
 db
 summary(db)
 ```
