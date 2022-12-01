@@ -53,7 +53,7 @@ head(df)
 
 # Hierarchical clustering
 
-[Add info here]
+In hierarchical clustering we focused on using euclidian distance as our measure for the objects.We represented our hierarchical data with a dendrogram which is an upside down tree. We found that our optimal number of clusters was 3.
 
 ## Optimal number of clusters
 
@@ -151,7 +151,7 @@ df %>%
 
 ## Map clusters {.tabset}
 
-The dendrograms can be difficult to read since there are a lot of countries -- `r length(row.names(df))` in total! Luckily, since we are working with countries, we can also plot the clusters onto a world map. Below are some of the functions that we'll use to make our maps.
+The dendrograms can be difficult to read since there are a lot of countries -- `r length(row.names(df))` in total! Luckily, since we are working with countries, we can also plot the clusters onto a world map. Below are some of the functions that we'll use to make our maps. 
 
 ```{r}
 # perform hierarchical clustering and get k clusters
