@@ -285,32 +285,31 @@ str(df)
 
 ```{r}
 df.matrix <- as.matrix(df)
-kNNdistplot(df.matrix, k=4)
-abline(h=6000, col="red")
+kNNdistplot(df.matrix, k=5)
+abline(h=5000, col="red")
 ```
 ```{r}
 set.seed(1)
 db <- dbscan(df, eps = 5000, minPts = 5)
 db
+summary(db)
 ```
+
+## Map clusters
+
+```{r}
+fviz_cluster(db, df, geom = 'point')
+```
+
 
 ```{r}
 hullplot(df.matrix, db$cluster)
 ```
 
 ```{r}
-plot(db, df.matrix, main = "DBScan")
+#plot(db, df, main = "DBScan")
 ```
-## Map clusters
 
-Note that some countries are not included in the country dataset, such as Mexico and Greenland.
-
-```{r}
-db$cluster %>%
-  clust_to_df() %>%
-  rename_countries() %>%
-  plot_map()
-```
 
 # References
 
