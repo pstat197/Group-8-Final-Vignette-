@@ -47,6 +47,9 @@ countries <- read.csv("../data/country-data.csv")
 # use the countries as the row names
 df <- countries %>%
   column_to_rownames(var = "country")
+
+# show the first few rows of the dataframe
+head(df)
 ```
 
 # Hierarchical clustering
@@ -256,7 +259,7 @@ Clusters are not necessarily strict boundaries -- for example, if a point is fur
 
 <br><center>![](../img/mb-cluster-gaussian.png){width="357"}</center></br>
 
-To define such a distribution for a given set of observations, we need to define a covariance matrix. We won't get into the mathematical details here (see the paper [here](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) for a more rigorous treatment), but the basic idea is that by modifying this matrix, we can create different types of clusters that are determined by three aspects:
+To define such a distribution for a given set of observations, we need to define a covariance matrix. We won't get into the mathematical details here (see [this paper](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) for a more rigorous treatment), but the basic idea is that by modifying this matrix, we can create different types of clusters that are determined by three aspects:
 
 -   **Volume:** the number of observations in each cluster
     -   Equal: all clusters have (roughly) the same number of observations
