@@ -17,7 +17,6 @@ pre code, pre, code {
 }
 </style>
 ```
-
 ```{r, include=FALSE}
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
@@ -255,9 +254,13 @@ df %>%
 
 # Model-based clustering
 
-Clusters are not necessarily strict boundaries -- for example, if a point is further away from the center of a cluster, then it may be less likely to be in that cluster. One assumption we can make is that the clusters follow a (multivariate) Gaussian or normal distribution, like the example below.
+Clusters are not necessarily strict boundaries -- for example, if a point is further away from the center of a cluster, then it may be less likely to be in that cluster. To account for this uncertainty, one assumption we can make is that the clusters follow a (multivariate) Gaussian or normal distribution, which is a probability density function. An example of this with two variables is shown below.
 
-<br><center>![](../img/mb-cluster-gaussian.png){width="357"}</center></br>
+<br>
+
+<center>![[Image source](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-gaussian.png){width="357"}</center>
+
+</br>
 
 To define such a distribution for a given set of observations, we need to define a covariance matrix. We won't get into the mathematical details here (see [this paper](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) for a more rigorous treatment), but the basic idea is that by modifying this matrix, we can create different types of clusters that are determined by three aspects:
 
@@ -279,11 +282,19 @@ Below is a table containing all of the possible types of clusters. The identifie
 -   V = "variable"
 -   I = "coordinate axes"
 
-<br><center>![](../img/mb-cluster-models-table.png){width="453"}</center></br>
+<br>
+
+<center>![[Image source](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-models-table.png){width="453"}</center>
+
+</br>
 
 Here are some visuals to accompany the table above (note that not all of the models are shown).
 
-<br><center>![](../img/mb-cluster-models-visual.png){width="433"}</center></br>
+<br>
+
+<center>![[Image source](https://www.stat.cmu.edu/\~rnugent/PUBLIC/teaching/CMU729/Lectures/MBCComments.pdf)](../img/mb-cluster-models-visual.png){width="433"}</center>
+
+</br>
 
 To identify both the optimal model and number of clusters, the Bayesian Information Criterion (BIC) is used since it penalizes models with more parameters, i.e. the "general" clusters are penalized more since they have more variability and thus require more parameters. Many combinations of different models and numbers and clusters are fit, and the combination that yields the maximum BIC is chosen as the "best" one.
 
@@ -316,7 +327,7 @@ plot(mb, what = "BIC")
 
 ## Map clusters
 
-Like before, we plot our clusters onto the world map. Notice that we have more clusters here than we used hierachical clustering.
+Like before, we plot our clusters onto the world map. Notice that we have more clusters here than when we used hierachical clustering.
 
 ```{r, out.width='150%'}
 mb$classification %>%
@@ -388,4 +399,4 @@ db_clust %>%
 -   Model-based clustering
     -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
     -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
-- Density-based clustering
+-   Density-based clustering
