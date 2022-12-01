@@ -11,3 +11,4 @@ dendextend
 factoextra
 mclust
 cluster
+dbscan

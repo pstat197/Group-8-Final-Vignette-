@@ -7,6 +7,7 @@ output:
     toc_float: true
 ---
 
+```{=html}
 <style>
 pre code, pre, code {
   white-space: pre !important;
@@ -15,7 +16,7 @@ pre code, pre, code {
   word-wrap: initial !important;
 }
 </style>
-
+```
 ```{r, include=FALSE}
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
@@ -55,10 +56,10 @@ df <- countries %>%
 
 **Elbow method**
 
-- Looks at the total within-cluster sum of squares (WSS)
-- Similar to proportion of variance explained (PVE) plot in PCA
-- The optimal number of clusters is the point where the plot appears to bend
-- Lower WSS = better
+-   Looks at the total within-cluster sum of squares (WSS)
+-   Similar to proportion of variance explained (PVE) plot in PCA
+-   The optimal number of clusters is the point where the plot appears to bend
+-   Lower WSS = better
 
 ```{r}
 # best = 4 clusters (not much improvement after 4 clusters)
@@ -69,8 +70,8 @@ fviz_nbclust(df,
 
 **Average silhouette method**
 
-- Determines how well each object lies within its cluster
-- Higher average silhouette = better
+-   Determines how well each object lies within its cluster
+-   Higher average silhouette = better
 
 ```{r}
 # best = 2 clusters
@@ -81,9 +82,9 @@ fviz_nbclust(df,
 
 **Gap statistic method**
 
-- Compares the total within intra-cluster variation for different values of $k$ with randomly drawn samples
-- Choose $k$ such that the gap statistic is within 1 standard deviation of the gap statistic at $k + 1$
-- Higher gap statistic = better
+-   Compares the total within intra-cluster variation for different values of $k$ with randomly drawn samples
+-   Choose $k$ such that the gap statistic is within 1 standard deviation of the gap statistic at $k + 1$
+-   Higher gap statistic = better
 
 ```{r}
 library(cluster)
@@ -248,7 +249,37 @@ df %>%
 
 # Model-based clustering
 
-[Add info here]
+Clusters are not necessarily strict boundaries -- for example, if a point is further away from the center of a cluster, then it may be less likely to be in that cluster. One assumption we can make is that the clusters follow a (multivariate) Gaussian or normal distribution, like the example below.
+
+<br><center>![](../img/mb-cluster-gaussian.png){width="357"}</center></br>
+
+To define such a distribution for a given set of observations, we need to define a covariance matrix. We won't get into the mathematical details here (see the paper here for a more rigorous treatment), but the basic idea is that by modifying this matrix, we can create different types of clusters that are determined by three things:
+
+-   **Volume:** the number of observations in each cluster
+    -   Equal: all clusters have (roughly) the same number of observations
+    -   Variable: the clusters can have varying number of observations
+-   **Shape:** the width of the clusters
+    -   Equal: all clusters have the same shape (e.g. all spherical, all elliptical)
+    -   Variable: the clusters can have different shapes
+    -   Orientation: how the clusters are positioned in space and what direction it is facing
+    -   NA: used for spherical clusters (since rotating these clusters doesn't change the groups)
+-   **Axes:** the clusters are parallel to the axis/axes
+    -   Equal: all clusters have the same orientation
+    -   Variable: the clusters can have different orientations
+
+Below is a table containing all of the possible types of clusters. The identifiers are made up of three letters, which indicate what volume, shape, and orientation the clusters have. These are labeled as follows:
+
+-   E = "equal"
+-   V = "variable"
+-   I = "coordinate axes"
+
+<br><center>![](../img/mb-cluster-models-table.png){width="453"}</center></br>
+
+Here are some visuals to accompany the table above (note that not all of the models are shown).
+
+<br><center>![](../img/mb-cluster-models-visual.png){width="433"}</center></br>
+
+To identify both the optimal model and number of clusters, the Bayesian Information Criterion (BIC) is used since it penalizes models with more parameters, i.e. the "general" clusters are penalized more since they have more variability and thus require more parameters. Many combinations of different models and numbers and clusters are fit, and the combination that yields the maximum BIC is chosen as the "best" one.
 
 ## Choosing the best model
 
@@ -277,8 +308,8 @@ mb$classification %>%
 [Add info here]
 
 ## Choosing the best model
+
 ```{r}
-#install.packages("dbscan")
 library(dbscan)
 str(df)
 ```
@@ -288,6 +319,7 @@ df.matrix <- as.matrix(df)
 kNNdistplot(df.matrix, k=6)
 abline(h=5000, col="red")
 ```
+
 ```{r}
 set.seed(1)
 db <- dbscan(df, eps = 5000, minPts = 6)
@@ -301,7 +333,6 @@ summary(db)
 fviz_cluster(db, df, geom = 'point')
 ```
 
-
 ```{r}
 hullplot(df.matrix, db$cluster)
 ```
@@ -310,17 +341,16 @@ hullplot(df.matrix, db$cluster)
 #plot(db, df, main = "DBScan")
 ```
 
-
 # References
 
-- Dataset
-    - [Country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
-- Hierarchical clustering
-    - [ISLR textbook](https://trevorhastie.github.io/ISLR/ISLR%20Seventh%20Printing.pdf)
-    - [Using the `hclust()` function](https://r-charts.com/part-whole/hclust/)
-    - [Customization for `hclust()`](https://stackoverflow.com/questions/55207216/r-rect-hclust-rectangles-too-high-in-dendogram)
-    - [Determining the optimal number of clusters](https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/)
-    - [Using the `fviz_nbclust()` and `fviz_gap_stat()` functions](https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html)
-- Model-based clustering
-    - [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
-    - [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
+-   Dataset
+    -   [Country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
+-   Hierarchical clustering
+    -   [ISLR textbook](https://trevorhastie.github.io/ISLR/ISLR%20Seventh%20Printing.pdf)
+    -   [Using the `hclust()` function](https://r-charts.com/part-whole/hclust/)
+    -   [Customization for `hclust()`](https://stackoverflow.com/questions/55207216/r-rect-hclust-rectangles-too-high-in-dendogram)
+    -   [Determining the optimal number of clusters](https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/)
+    -   [Using the `fviz_nbclust()` and `fviz_gap_stat()` functions](https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html)
+-   Model-based clustering
+    -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
+    -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
