@@ -17,6 +17,7 @@ pre code, pre, code {
 }
 </style>
 ```
+
 ```{r, include=FALSE}
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
@@ -161,8 +162,7 @@ k_hclust <- function(.df, k) {
 # turn the cluster output into a dataframe
 clust_to_df <- function(.clust) {
   .clust %>%
-    rbind() %>%
-    t() %>% 
+    cbind() %>% 
     data.frame() %>%
     rename(cluster = 1) %>%
     mutate(cluster = factor(cluster)) %>%
@@ -253,7 +253,7 @@ Clusters are not necessarily strict boundaries -- for example, if a point is fur
 
 <br><center>![](../img/mb-cluster-gaussian.png){width="357"}</center></br>
 
-To define such a distribution for a given set of observations, we need to define a covariance matrix. We won't get into the mathematical details here (see the paper here for a more rigorous treatment), but the basic idea is that by modifying this matrix, we can create different types of clusters that are determined by three things:
+To define such a distribution for a given set of observations, we need to define a covariance matrix. We won't get into the mathematical details here (see the paper [here](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) for a more rigorous treatment), but the basic idea is that by modifying this matrix, we can create different types of clusters that are determined by three aspects:
 
 -   **Volume:** the number of observations in each cluster
     -   Equal: all clusters have (roughly) the same number of observations
@@ -267,7 +267,7 @@ To define such a distribution for a given set of observations, we need to define
     -   Equal: all clusters have the same orientation
     -   Variable: the clusters can have different orientations
 
-Below is a table containing all of the possible types of clusters. The identifiers are made up of three letters, which indicate what volume, shape, and orientation the clusters have. These are labeled as follows:
+Below is a table containing all of the possible types of clusters. The identifiers are made up of three letters, which indicate what volume, shape, and orientation the clusters have, respectively. These are labeled as follows:
 
 -   E = "equal"
 -   V = "variable"
@@ -283,13 +283,23 @@ To identify both the optimal model and number of clusters, the Bayesian Informat
 
 ## Choosing the best model
 
+Run the algorithm (may take a minute or two)
+
 ```{r}
 mb <- Mclust(df)
 summary(mb)
 ```
 
+Plots between pairs of variables
+
 ```{r}
 plot(mb, what = c("classification"))
+```
+
+BIC plot
+
+```{r}
+plot(mb, what = c("BIC"))
 ```
 
 ## Map clusters
@@ -338,7 +348,19 @@ hullplot(df.matrix, db$cluster)
 ```
 
 ```{r}
-#plot(db, df, main = "DBScan")
+# plot(db, df, main = "DBScan")
+```
+
+```{r}
+# add country names to clusters
+db_clust <- db$cluster
+names(db_clust) <- row.names(df)
+
+# plot map clusters
+db_clust %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
 ```
 
 # References
