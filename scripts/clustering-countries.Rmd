@@ -265,22 +265,22 @@ Clusters are not necessarily strict boundaries -- for example, if a point is fur
 To define such a distribution for a given set of observations, we need to define a covariance matrix. We won't get into the mathematical details here (see [this paper](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) for a more rigorous treatment), but the basic idea is that by modifying this matrix, we can create different types of clusters that are determined by three aspects:
 
 -   **Volume:** the number of observations in each cluster
-    -   Equal: all clusters have (roughly) the same number of observations
-    -   Variable: the clusters can have varying number of observations
+    -   *Equal:* all clusters have (roughly) the same number of observations
+    -   *Variable:* the clusters can have varying number of observations
 -   **Shape:** the width of the clusters
-    -   Equal: all clusters have the same shape (e.g. all spherical, all elliptical)
-    -   Variable: the clusters can have different shapes
-    -   Orientation: how the clusters are positioned in space and what direction it is facing
-    -   NA: used for spherical clusters (since rotating these clusters doesn't change the groups)
--   **Axes:** the clusters are parallel to the axis/axes
-    -   Equal: all clusters have the same orientation
-    -   Variable: the clusters can have different orientations
+    -   *Equal:* all clusters have the same shape (e.g. all spherical, all elliptical)
+    -   *Variable:* the clusters can have different shapes
+-   **Orientation:** how the clusters are positioned in space and what direction it is facing
+    -   *NA:* used for spherical clusters (since rotating these clusters doesn't change the groups)
+    -   *Axes:* all clusters are parallel to the axis/axes
+    -   *Equal:* all clusters have the same orientation
+    -   *Variable:* the clusters can have different orientations
 
 Below is a table containing all of the possible types of clusters. The identifiers are made up of three letters, which indicate what volume, shape, and orientation the clusters have, respectively. These are labeled as follows:
 
--   E = "equal"
--   V = "variable"
--   I = "coordinate axes"
+-   *E* = "equal"
+-   *V* = "variable"
+-   *I* = "coordinate axes"
 
 <br>
 
@@ -292,11 +292,11 @@ Here are some visuals to accompany the table above (note that not all of the mod
 
 <br>
 
-<center>![[Image source](https://www.stat.cmu.edu/\~rnugent/PUBLIC/teaching/CMU729/Lectures/MBCComments.pdf)](../img/mb-cluster-models-visual.png){width="433"}</center>
+<center>![[Image source](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)](../img/mb-cluster-models-visual.png){width="433"}</center>
 
 </br>
 
-To identify both the optimal model and number of clusters, the Bayesian Information Criterion (BIC) is used since it penalizes models with more parameters, i.e. the "general" clusters are penalized more since they have more variability and thus require more parameters. Many combinations of different models and numbers and clusters are fit, and the combination that yields the maximum BIC is chosen as the "best" one.
+To identify both the optimal model and number of clusters, the Bayesian Information Criterion (BIC) is used since it penalizes models with more parameters, i.e. the "general" clusters are penalized more since they have more variability (and therefore more parameters). Many combinations of different models and numbers and clusters are fit, and the combination that yields the maximum BIC is chosen as the "best" one.
 
 ## Choosing the best model {.tabset}
 
