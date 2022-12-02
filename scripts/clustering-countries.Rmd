@@ -157,25 +157,26 @@ The dendrograms can be difficult to read since there are a lot of countries -- `
 # perform hierarchical clustering and get k clusters
 k_hclust <- function(.df, k) {
   .df %>%
-    scale() %>%
-    dist() %>%
-    hclust() %>%
-    cutree(k)
+    scale() %>%  # scale the columns
+    dist() %>%   # get the Euclidean distance between rows
+    hclust() %>% # apply hierarchical clustering
+    cutree(k)    # separate observations into k clusters
 }
 
 # turn the cluster output into a dataframe
 clust_to_df <- function(.clust) {
   .clust %>%
-    cbind() %>% 
+    cbind() %>%
     data.frame() %>%
     rename(cluster = 1) %>%
     mutate(cluster = factor(cluster)) %>%
-    rownames_to_column("country")
+    rownames_to_column("country")         
 }
 
 # rename countries to be able to plot them
 rename_countries <- function(.df) {
   .df %>%
+    # replace original country names with other country names (important for the plot_map function()!)
     mutate(across('country', str_replace, 'Antigua and Barbuda', 'Antigua'),
            across('country', str_replace, 'Congo, Dem. Rep.', 'Democratic Republic of the Congo'),
            across('country', str_replace, 'Congo, Rep.', 'Republic of Congo'),
@@ -188,16 +189,19 @@ rename_countries <- function(.df) {
            across('country', str_replace, 'St. Vincent and the Grenadines', 'Saint Vincent'),
            across('country', str_replace, 'United Kingdom', 'UK'),
            across('country', str_replace, 'United States', 'USA')) %>%
+    # add separate rows for countries that were originally grouped together
     add_row(country = 'Barbuda', cluster = filter(., country == 'Antigua') %>% getElement('cluster')) %>%
     add_row(country = 'Grenadines', cluster = filter(., country == 'Saint Vincent') %>% getElement('cluster'))
 }
 
 # plots the clusters onto the world map
 plot_map <- function(.df) {
-  world <- map_data("world")
+  world <- map_data("world") # dataframe containing information on world countries
   
   world %>%
+    # (left) join 'world' dataframe with another dataframe at columns with the country names
     left_join(.df, by = c("region" = "country")) %>%
+    # plot the map
     ggplot() + 
     geom_polygon(aes(x = long, y = lat, fill = cluster, group = group),
                  color = "white") +
@@ -209,14 +213,14 @@ plot_map <- function(.df) {
 If you're curious, this is how we determined what names to change.
 
 ```{r}
-# get world data
+# dataframe containing information on world countries
 world <- map_data("world")
 
-# get unique countries in the df and world dataframes
+# get unique countries in 'df' and 'world'
 unique_countries_df <- row.names(df) %>% unique() %>% sort()
 unique_countries_world <- world$region %>% unique() %>% sort()
 
-# get all countries that occur in df but not in world
+# get all countries that occur in 'df' but not in 'world'
 setdiff(unique_countries_df, unique_countries_world)
 ```
 
@@ -292,7 +296,7 @@ Here are some visuals to accompany the table above (note that not all of the mod
 
 <br>
 
-<center>![[Image source](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)](../img/mb-cluster-models-visual.png){width="433"}</center>
+<center>![[Image source](https://www.stat.cmu.edu/~rnugent/PUBLIC/teaching/CMU729/Lectures/MBCComments.pdf)](../img/mb-cluster-models-visual.png){width="433"}</center>
 
 </br>
 
@@ -305,15 +309,19 @@ To identify both the optimal model and number of clusters, the Bayesian Informat
 Run the code below (it may take a minute or two since it is trying all of the possible models using different numbers of clusters). The output includes the optimal model and number of clusters, along with how many observations are in each cluster.
 
 ```{r}
+# run model-based clustering algorithm
 mb <- Mclust(df)
+
+# output model and number of clusters chosen
 summary(mb)
 ```
 
 ### Classification plots
 
-We can see how the points are classified for each pair of variables in the dataset.
+We can see how the points are classified for each pair of variables in the dataset using the chosen model and number of clusters.
 
 ```{r}
+# create classification plots
 plot(mb, what = "classification")
 ```
 
@@ -322,6 +330,7 @@ plot(mb, what = "classification")
 We can also compare all of the models at different numbers of clusters. Higher BIC suggests a better model.
 
 ```{r}
+# create BIC plot
 plot(mb, what = "BIC")
 ```
 
@@ -330,6 +339,7 @@ plot(mb, what = "BIC")
 Like before, we plot our clusters onto the world map. Notice that we have more clusters here than when we used hierachical clustering.
 
 ```{r, out.width='150%'}
+# plot map clusters
 mb$classification %>%
   clust_to_df() %>%
   rename_countries() %>%
