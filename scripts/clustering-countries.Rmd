@@ -17,6 +17,7 @@ pre code, pre, code {
 }
 </style>
 ```
+
 ```{r, include=FALSE}
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
@@ -27,7 +28,9 @@ knitr::opts_chunk$set(echo = TRUE,
 options(width = 200)
 ```
 
-# Setup
+# Introduction
+
+[Introduce dataset and why unsupervised learning would be helpful here, also describe what clustering is]
 
 **Objective:** We want to categorize countries using socio-economic and health factors that determine the overall development of each country (from the [Kaggle description](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)).
 
@@ -36,9 +39,11 @@ We load in the necessary packages and the [country data](https://www.kaggle.com/
 ```{r, message=FALSE}
 # load packages
 library(tidyverse)
-library(dendextend)
 library(factoextra)
+library(cluster)
+library(dendextend)
 library(mclust)
+library(dbscan)
 
 # read data
 countries <- read.csv("../data/country-data.csv")
@@ -55,9 +60,13 @@ head(df)
 
 In hierarchical clustering we focused on using euclidian distance as our measure for the objects.We represented our hierarchical data with a dendrogram which is an upside down tree. We found that our optimal number of clusters was 3.
 
-## Optimal number of clusters
+## Optimal number of clusters {.tabset}
 
-**Elbow method**
+[Describe what the `fviz_nbclust()` function does]
+
+[Maybe try to describe these sections better? Especially gap statistic]
+
+### Elbow method
 
 -   Looks at the total within-cluster sum of squares (WSS)
 -   Similar to proportion of variance explained (PVE) plot in PCA
@@ -71,7 +80,7 @@ fviz_nbclust(df,
              method = "wss")
 ```
 
-**Average silhouette method**
+### Average silhouette method
 
 -   Determines how well each object lies within its cluster
 -   Higher average silhouette = better
@@ -83,14 +92,13 @@ fviz_nbclust(df,
              method = "silhouette")
 ```
 
-**Gap statistic method**
+### Gap statistic method
 
 -   Compares the total within intra-cluster variation for different values of $k$ with randomly drawn samples
 -   Choose $k$ such that the gap statistic is within 1 standard deviation of the gap statistic at $k + 1$
 -   Higher gap statistic = better
 
 ```{r}
-library(cluster)
 set.seed(123)
 gap_stat <- clusGap(df,
                     hcut,
@@ -103,7 +111,9 @@ fviz_gap_stat(gap_stat)
 
 ## Dendrograms {.tabset}
 
-To visually show the hierarchical clusters, we can plot dendrograms for each of the following clusters.
+To visually show the hierarchical clusters, we can plot dendrograms for each of the following clusters. We use $k = 2, 3, 4$ clusters based on the optimal number of clusters in the previous section.
+
+[Talk about scaling and Euclidean distance]
 
 [Identify changes]
 
@@ -111,42 +121,42 @@ To visually show the hierarchical clusters, we can plot dendrograms for each of 
 
 ```{r, fig.height=20}
 df %>%
-  scale() %>%
-  dist() %>%
-  hclust() %>%
-  as.dendrogram() %>%
-  set("labels_cex", 0.4) %>%
-  color_branches(k = 2) %>% 
-  color_labels(k = 2) %>%
-  plot(horiz = TRUE)
+  scale() %>%                # scale and center the columns
+  dist() %>%                 # get the Euclidean distances between rows             
+  hclust() %>%               # apply hierarchical clustering
+  as.dendrogram() %>%        # turn the cluster output into a dendrogram
+  set("labels_cex", 0.4) %>% # make the font size smaller
+  color_branches(k = 2) %>%  # color the branches based on the 2 clusters
+  color_labels(k = 2) %>%    # color the labels based on the 2 clusters
+  plot(horiz = TRUE)         # make the labels appear on the right
 ```
 
 ### $k = 3$ clusters
 
 ```{r, fig.height=20}
 df %>%
-  scale() %>%
-  dist() %>%
-  hclust() %>%
-  as.dendrogram() %>%
-  set("labels_cex", 0.4) %>%
-  color_branches(k = 3) %>% 
-  color_labels(k = 3) %>%
-  plot(horiz = TRUE)
+  scale() %>%                # scale and center the columns
+  dist() %>%                 # get the Euclidean distances between rows  
+  hclust() %>%               # apply hierarchical clustering
+  as.dendrogram() %>%        # turn the cluster output into a dendrogram
+  set("labels_cex", 0.4) %>% # make the font size smaller
+  color_branches(k = 3) %>%  # color the branches based on the 3 clusters
+  color_labels(k = 3) %>%    # color the labels based on the 3 clusters
+  plot(horiz = TRUE)         # make the labels appear on the right
 ```
 
 ### $k = 4$ clusters
 
 ```{r, fig.height=20}
 df %>%
-  scale() %>%
-  dist() %>%
-  hclust() %>%
-  as.dendrogram() %>%
-  set("labels_cex", 0.4) %>%
-  color_branches(k = 4) %>% 
-  color_labels(k = 4) %>%
-  plot(horiz = TRUE)
+  scale() %>%                # scale and center the columns
+  dist() %>%                 # get the Euclidean distances between rows  
+  hclust() %>%               # apply hierarchical clustering
+  as.dendrogram() %>%        # turn the cluster output into a dendrogram
+  set("labels_cex", 0.4) %>% # make the font size smaller
+  color_branches(k = 4) %>%  # color the branches based on the 4 clusters
+  color_labels(k = 4) %>%    # color the labels based on the 4 clusters
+  plot(horiz = TRUE)         # make the labels appear on the right
 ```
 
 ## Map clusters {.tabset}
@@ -157,26 +167,26 @@ The dendrograms can be difficult to read since there are a lot of countries -- `
 # perform hierarchical clustering and get k clusters
 k_hclust <- function(.df, k) {
   .df %>%
-    scale() %>%  # scale the columns
-    dist() %>%   # get the Euclidean distance between rows
+    scale() %>%  # scale and center the columns
+    dist() %>%   # get the Euclidean distances between rows
     hclust() %>% # apply hierarchical clustering
     cutree(k)    # separate observations into k clusters
 }
 
 # turn the cluster output into a dataframe
 clust_to_df <- function(.clust) {
-  .clust %>%
-    cbind() %>%
-    data.frame() %>%
-    rename(cluster = 1) %>%
-    mutate(cluster = factor(cluster)) %>%
-    rownames_to_column("country")         
+  .clust %>%                              # must be a named vector: clusters as values, countries as names
+    cbind() %>%                           # combine countries and clusters by column
+    data.frame() %>%                      # convert to data frame
+    rename(cluster = 1) %>%               # rename the first column as 'cluster'
+    mutate(cluster = factor(cluster)) %>% # convert the 'cluster' column into a factor
+    rownames_to_column("country")         # turn the row names (countries) into a column called 'country'
 }
 
 # rename countries to be able to plot them
 rename_countries <- function(.df) {
   .df %>%
-    # replace original country names with other country names (important for the plot_map function()!)
+    # replace original country names with new country names (important for the plot_map() function!)
     mutate(across('country', str_replace, 'Antigua and Barbuda', 'Antigua'),
            across('country', str_replace, 'Congo, Dem. Rep.', 'Democratic Republic of the Congo'),
            across('country', str_replace, 'Congo, Rep.', 'Republic of Congo'),
@@ -196,7 +206,8 @@ rename_countries <- function(.df) {
 
 # plots the clusters onto the world map
 plot_map <- function(.df) {
-  world <- map_data("world") # dataframe containing information on world countries
+  # dataframe containing information (e.g. latitude, longitude) on all countries
+  world <- map_data("world")
   
   world %>%
     # (left) join 'world' dataframe with another dataframe at columns with the country names
@@ -213,7 +224,7 @@ plot_map <- function(.df) {
 If you're curious, this is how we determined what names to change.
 
 ```{r}
-# dataframe containing information on world countries
+# dataframe containing information (e.g. latitude, longitude) on all countries
 world <- map_data("world")
 
 # get unique countries in 'df' and 'world'
@@ -352,10 +363,7 @@ mb$classification %>%
 
 ## Choosing the best model
 
-```{r}
-library(dbscan)
-str(df)
-```
+[Need to change `abline()` part since now the dataframe is scaled]
 
 ```{r}
 scale.df <- df %>% scale()
