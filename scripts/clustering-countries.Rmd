@@ -348,7 +348,8 @@ str(df)
 ```
 
 ```{r}
-df.matrix <- as.matrix(df)
+scale.df <- df %>% scale()
+df.matrix <- as.matrix(scale.df)
 kNNdistplot(df.matrix, k=6)
 abline(h=5000, col="red")
 ```
