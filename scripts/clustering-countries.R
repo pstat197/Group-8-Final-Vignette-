@@ -1,4 +1,4 @@
-## ---- include=FALSE-------------------------------------------------------------------------------
+## ---- include=FALSE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
                       fig.align = 'center',
@@ -8,12 +8,14 @@ knitr::opts_chunk$set(echo = TRUE,
 options(width = 200)
 
 
-## ---- message=FALSE-------------------------------------------------------------------------------
+## ---- message=FALSE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # load packages
 library(tidyverse)
-library(dendextend)
 library(factoextra)
+library(cluster)
+library(dendextend)
 library(mclust)
+library(dbscan)
 
 # read data
 countries <- read.csv("../data/country-data.csv")
@@ -26,22 +28,21 @@ df <- countries %>%
 head(df)
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # best = 4 clusters (not much improvement after 4 clusters)
 fviz_nbclust(df, 
              hcut, 
              method = "wss")
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # best = 2 clusters
 fviz_nbclust(df, 
              hcut, 
              method = "silhouette")
 
 
-## -------------------------------------------------------------------------------------------------
-library(cluster)
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 set.seed(123)
 gap_stat <- clusGap(df,
                     hcut,
@@ -52,65 +53,66 @@ gap_stat <- clusGap(df,
 fviz_gap_stat(gap_stat)
 
 
-## ---- fig.height=20-------------------------------------------------------------------------------
+## ---- fig.height=20-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 df %>%
-  scale() %>%
-  dist() %>%
-  hclust() %>%
-  as.dendrogram() %>%
-  set("labels_cex", 0.4) %>%
-  color_branches(k = 2) %>% 
-  color_labels(k = 2) %>%
-  plot(horiz = TRUE)
+  scale() %>%                # scale and center the columns
+  dist() %>%                 # get the Euclidean distances between rows             
+  hclust() %>%               # apply hierarchical clustering
+  as.dendrogram() %>%        # turn the cluster output into a dendrogram
+  set("labels_cex", 0.4) %>% # make the font size smaller
+  color_branches(k = 2) %>%  # color the branches based on the 2 clusters
+  color_labels(k = 2) %>%    # color the labels based on the 2 clusters
+  plot(horiz = TRUE)         # make the labels appear on the right
 
 
-## ---- fig.height=20-------------------------------------------------------------------------------
+## ---- fig.height=20-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 df %>%
-  scale() %>%
-  dist() %>%
-  hclust() %>%
-  as.dendrogram() %>%
-  set("labels_cex", 0.4) %>%
-  color_branches(k = 3) %>% 
-  color_labels(k = 3) %>%
-  plot(horiz = TRUE)
+  scale() %>%                # scale and center the columns
+  dist() %>%                 # get the Euclidean distances between rows  
+  hclust() %>%               # apply hierarchical clustering
+  as.dendrogram() %>%        # turn the cluster output into a dendrogram
+  set("labels_cex", 0.4) %>% # make the font size smaller
+  color_branches(k = 3) %>%  # color the branches based on the 3 clusters
+  color_labels(k = 3) %>%    # color the labels based on the 3 clusters
+  plot(horiz = TRUE)         # make the labels appear on the right
 
 
-## ---- fig.height=20-------------------------------------------------------------------------------
+## ---- fig.height=20-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 df %>%
-  scale() %>%
-  dist() %>%
-  hclust() %>%
-  as.dendrogram() %>%
-  set("labels_cex", 0.4) %>%
-  color_branches(k = 4) %>% 
-  color_labels(k = 4) %>%
-  plot(horiz = TRUE)
+  scale() %>%                # scale and center the columns
+  dist() %>%                 # get the Euclidean distances between rows  
+  hclust() %>%               # apply hierarchical clustering
+  as.dendrogram() %>%        # turn the cluster output into a dendrogram
+  set("labels_cex", 0.4) %>% # make the font size smaller
+  color_branches(k = 4) %>%  # color the branches based on the 4 clusters
+  color_labels(k = 4) %>%    # color the labels based on the 4 clusters
+  plot(horiz = TRUE)         # make the labels appear on the right
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # perform hierarchical clustering and get k clusters
 k_hclust <- function(.df, k) {
   .df %>%
-    scale() %>%
-    dist() %>%
-    hclust() %>%
-    cutree(k)
+    scale() %>%  # scale and center the columns
+    dist() %>%   # get the Euclidean distances between rows
+    hclust() %>% # apply hierarchical clustering
+    cutree(k)    # separate observations into k clusters
 }
 
 # turn the cluster output into a dataframe
 clust_to_df <- function(.clust) {
-  .clust %>%
-    cbind() %>% 
-    data.frame() %>%
-    rename(cluster = 1) %>%
-    mutate(cluster = factor(cluster)) %>%
-    rownames_to_column("country")
+  .clust %>%                              # must be a named vector: clusters as values, countries as names
+    cbind() %>%                           # combine countries and clusters by column
+    data.frame() %>%                      # convert to data frame
+    rename(cluster = 1) %>%               # rename the first column as 'cluster'
+    mutate(cluster = factor(cluster)) %>% # convert the 'cluster' column into a factor
+    rownames_to_column("country")         # turn the row names (countries) into a column called 'country'
 }
 
 # rename countries to be able to plot them
 rename_countries <- function(.df) {
   .df %>%
+    # replace original country names with new country names (important for the plot_map() function!)
     mutate(across('country', str_replace, 'Antigua and Barbuda', 'Antigua'),
            across('country', str_replace, 'Congo, Dem. Rep.', 'Democratic Republic of the Congo'),
            across('country', str_replace, 'Congo, Rep.', 'Republic of Congo'),
@@ -123,16 +125,20 @@ rename_countries <- function(.df) {
            across('country', str_replace, 'St. Vincent and the Grenadines', 'Saint Vincent'),
            across('country', str_replace, 'United Kingdom', 'UK'),
            across('country', str_replace, 'United States', 'USA')) %>%
+    # add separate rows for countries that were originally grouped together
     add_row(country = 'Barbuda', cluster = filter(., country == 'Antigua') %>% getElement('cluster')) %>%
     add_row(country = 'Grenadines', cluster = filter(., country == 'Saint Vincent') %>% getElement('cluster'))
 }
 
 # plots the clusters onto the world map
 plot_map <- function(.df) {
+  # dataframe containing information (e.g. latitude, longitude) on all countries
   world <- map_data("world")
   
   world %>%
+    # (left) join 'world' dataframe with another dataframe at columns with the country names
     left_join(.df, by = c("region" = "country")) %>%
+    # plot the map
     ggplot() + 
     geom_polygon(aes(x = long, y = lat, fill = cluster, group = group),
                  color = "white") +
@@ -141,19 +147,19 @@ plot_map <- function(.df) {
 }
 
 
-## -------------------------------------------------------------------------------------------------
-# get world data
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# dataframe containing information (e.g. latitude, longitude) on all countries
 world <- map_data("world")
 
-# get unique countries in the df and world dataframes
+# get unique countries in 'df' and 'world'
 unique_countries_df <- row.names(df) %>% unique() %>% sort()
 unique_countries_world <- world$region %>% unique() %>% sort()
 
-# get all countries that occur in df but not in world
+# get all countries that occur in 'df' but not in 'world'
 setdiff(unique_countries_df, unique_countries_world)
 
 
-## ---- out.width='150%'----------------------------------------------------------------------------
+## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 df %>%
   k_hclust(2) %>%
   clust_to_df() %>%
@@ -161,7 +167,7 @@ df %>%
   plot_map()
 
 
-## ---- out.width='150%'----------------------------------------------------------------------------
+## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 df %>%
   k_hclust(3) %>%
   clust_to_df() %>%
@@ -169,7 +175,7 @@ df %>%
   plot_map()
 
 
-## ---- out.width='150%'----------------------------------------------------------------------------
+## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 df %>%
   k_hclust(4) %>%
   clust_to_df() %>%
@@ -177,57 +183,59 @@ df %>%
   plot_map()
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# run model-based clustering algorithm
 mb <- Mclust(df)
+
+# output model and number of clusters chosen
 summary(mb)
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# create classification plots
 plot(mb, what = "classification")
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# create BIC plot
 plot(mb, what = "BIC")
 
 
-## ---- out.width='150%'----------------------------------------------------------------------------
+## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# plot map clusters
 mb$classification %>%
   clust_to_df() %>%
   rename_countries() %>%
   plot_map()
 
 
-## -------------------------------------------------------------------------------------------------
-library(dbscan)
-str(df)
-
-
-## -------------------------------------------------------------------------------------------------
-df.matrix <- as.matrix(df)
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+scale.df <- df %>% scale()
+df.matrix <- as.matrix(scale.df)
 kNNdistplot(df.matrix, k=6)
 abline(h=5000, col="red")
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 set.seed(1)
 db <- dbscan(df, eps = 5000, minPts = 6)
 db
 summary(db)
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 fviz_cluster(db, df, geom = 'point')
 
 
-## -------------------------------------------------------------------------------------------------
+## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 hullplot(df.matrix, db$cluster)
 
 
-## ---- include=FALSE-------------------------------------------------------------------------------
+## ---- include=FALSE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # plot(db, df, main = "DBScan")
 
 
-## ---- out.width='150%'----------------------------------------------------------------------------
+## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # add country names to clusters
 db_clust <- db$cluster
 names(db_clust) <- row.names(df)
@@ -237,4 +245,10 @@ db_clust %>%
   clust_to_df() %>%
   rename_countries() %>%
   plot_map()
+
+
+## ---- include=FALSE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# To put just code in our R script (runs every time this document is knit):
+knitr::purl(input = 'clustering-countries.Rmd', 
+            output = 'clustering-countries.R')
 
