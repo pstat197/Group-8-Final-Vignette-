@@ -17,7 +17,6 @@ pre code, pre, code {
 }
 </style>
 ```
-
 ```{r, include=FALSE}
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
@@ -58,13 +57,19 @@ head(df)
 
 # Hierarchical clustering
 
-In hierarchical clustering we focused on using euclidian distance as our measure for the objects.We represented our hierarchical data with a dendrogram which is an upside down tree. We found that our optimal number of clusters was 3.
+In hierarchical clustering, we use the Euclidean distance as our similarity measure between each observation (in this case, the countries in our dataset).
+
+[either add link to or explain Euclidean distance, also add scaling part here]
 
 ## Optimal number of clusters {.tabset}
+
+[Unlike $k$-means clustering, we don't have to specify the number of clusters beforehand. But then how many clusters should we use?]
 
 [Describe what the `fviz_nbclust()` function does]
 
 [Maybe try to describe these sections better? Especially gap statistic]
+
+[See [here](https://towardsdatascience.com/how-many-clusters-6b3f220f0ef5)]
 
 ### Elbow method
 
@@ -111,9 +116,7 @@ fviz_gap_stat(gap_stat)
 
 ## Dendrograms {.tabset}
 
-To visually show the hierarchical clusters, we can plot dendrograms for each of the following clusters. We use $k = 2, 3, 4$ clusters based on the optimal number of clusters in the previous section.
-
-[Talk about scaling and Euclidean distance]
+To visually show the hierarchical clusters, we can plot diagrams called *dendrograms* for each of the following clusters. We use $k = 2, 3, 4$ clusters based on the optimal number of clusters in the previous section.
 
 [Identify changes]
 
@@ -161,7 +164,7 @@ df %>%
 
 ## Map clusters {.tabset}
 
-The dendrograms can be difficult to read since there are a lot of countries -- `r length(row.names(df))` in total! Luckily, since we are working with countries, we can also plot the clusters onto a world map. Below are some of the functions that we'll use to make our maps. 
+The dendrograms can be difficult to read since there are a lot of countries -- `r length(row.names(df))` in total! Luckily, since we are working with countries, we can also plot the clusters onto a world map. Below are some of the functions that we'll use to make our maps.
 
 ```{r}
 # perform hierarchical clustering and get k clusters
@@ -269,11 +272,11 @@ df %>%
 
 # Model-based clustering
 
-Clusters are not necessarily strict boundaries -- for example, if a point is further away from the center of a cluster, then it may be less likely to be in that cluster. To account for this uncertainty, one assumption we can make is that the clusters follow a (multivariate) Gaussian or normal distribution, which is a probability density function. An example of this with two variables is shown below.
+Clusters are not necessarily strict boundaries -- for example, if a point is further away from the center of a cluster, then it may be less likely to be in that cluster. To account for this uncertainty, one assumption we can make is that the clusters follow a (multivariate) normal distribution, which is a probability density function. (More formally, this model-based clustering method uses the Gaussian mixture model.) An example of this with two variables is shown below.
 
 <br>
 
-<center>![[Image source](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-gaussian.png){width="357"}</center>
+<center>![Image by [Mario Castro](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-gaussian.png){width="357"}</center>
 
 </br>
 
@@ -299,7 +302,7 @@ Below is a table containing all of the possible types of clusters. The identifie
 
 <br>
 
-<center>![[Image source](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-models-table.png){width="453"}</center>
+<center>![Image by [Mario Castro](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-models-table.png){width="453"}</center>
 
 </br>
 
@@ -307,17 +310,38 @@ Here are some visuals to accompany the table above (note that not all of the mod
 
 <br>
 
-<center>![[Image source](https://www.stat.cmu.edu/~rnugent/PUBLIC/teaching/CMU729/Lectures/MBCComments.pdf)](../img/mb-cluster-models-visual.png){width="433"}</center>
+<center>![Image by [Rebecca Nugent](https://www.stat.cmu.edu/~rnugent/PUBLIC/teaching/CMU729/Lectures/MBCComments.pdf)](../img/mb-cluster-models-visual.png){width="433"}</center>
 
 </br>
 
 To identify both the optimal model and number of clusters, the Bayesian Information Criterion (BIC) is used since it penalizes models with more parameters, i.e. the "general" clusters are penalized more since they have more variability (and therefore more parameters). Many combinations of different models and numbers and clusters are fit, and the combination that yields the maximum BIC is chosen as the "best" one.
 
+<details>
+
+<summary>**Why do we maximize the BIC? Aren't we supposed to minimize it?**</summary>
+
+Good question! Just to give some context, the BIC allows us to compare models with different numbers of parameters. From [this article](https://towardsdatascience.com/an-intuitive-explanation-of-the-bayesian-information-criterion-71a7a3d3a5c5), we want to minimize the BIC, which is defined as $$\text{BIC} = k \ln{(n)} - 2 \ln{(\hat{L})}$$ where
+
+-   $k$ is the number of model parameters,
+-   $n$ is the number of data points, and
+-   $L$ is the maximum likelihood function (i.e. how likely our data explained by a given model).
+
+Having more parameters tends to produce more flexible models that fit the model better and thus yield a higher likelihood (i.e. higher $\hat{L}$). This means the second term $-2 \ln{(\hat{L})}$ would become more negative, which decreases the BIC.
+
+However, we usually want to explain the data by using as few parameters as possible -- this is called the principle of parsimony. Having too many parameters can also risk overfitting the data, which may not generalize well to new data. As a result, we penalize models with more parameters. In math terms, we have a larger $k$, which makes the first term $k \ln{(n)}$ bigger, which in turn increases the BIC.
+
+Then why do we maximize the BIC here? It turns out that in [the paper (p. 54)](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) associated with the `mclust` package (which we use to run this algorithm), the BIC is roughly defined as
+$$\text{BIC} = 2 \ln{(\hat{L})} - k \ln{(n)}$$
+
+This is essentially taking the negative of our BIC equation from earlier, hence why the algorithm tries to maximize the BIC rather than minimizing it.
+
+</details>
+
 ## Choosing the best model {.tabset}
 
 ### Run the algorithm
 
-Run the code below (it may take a minute or two since it is trying all of the possible models using different numbers of clusters). The output includes the optimal model and number of clusters, along with how many observations are in each cluster.
+We use the the `Mclust()` function in the `mclust` package to run this algorithm. The code below may take a minute or two since it is fitting all of the possible models using different numbers of clusters. The output includes the optimal model and number of clusters, along with how many observations are in each cluster.
 
 ```{r}
 # run model-based clustering algorithm
@@ -418,6 +442,7 @@ db_clust %>%
 -   Model-based clustering
     -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
     -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
+    -   [Paper for the `mclust` package](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)
 -   Density-based clustering
 
 ```{r, include=FALSE}
