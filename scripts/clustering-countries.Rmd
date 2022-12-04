@@ -17,7 +17,6 @@ pre code, pre, code {
 }
 </style>
 ```
-
 ```{r, include=FALSE}
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
@@ -30,12 +29,11 @@ options(width = 200)
 
 # Introduction
 
-Clustering is a type of unsupervised learning method of machine learning. In the unsupervised learning method, the inferences are drawn from the data sets which do not contain labelled output variable. It is an exploratory data analysis technique that allows us to analyze the multivariate data sets. More specifically, clustering is a task of dividing the data sets into a certain number of clusters in such a manner that the data points belonging to a cluster have similar characteristics. It is done to segregate the groups with similar traits such that the distance between the data points within the clusters is minimal. In other words, the clusters are regions where the density of similar data points is high. It is generally used for the analysis of the data set, to find insightful data among huge data sets and draw inferences from it. 
+Clustering is a type of unsupervised learning method of machine learning. In the unsupervised learning method, the inferences are drawn from the data sets which do not contain labelled output variable. It is an exploratory data analysis technique that allows us to analyze the multivariate data sets. More specifically, clustering is a task of dividing the data sets into a certain number of clusters in such a manner that the data points belonging to a cluster have similar characteristics. It is done to segregate the groups with similar traits such that the distance between the data points within the clusters is minimal. In other words, the clusters are regions where the density of similar data points is high. It is generally used for the analysis of the data set, to find insightful data among huge data sets and draw inferences from it.
 
-It depends on the type of algorithm we use which decides how the clusters will be created. The inferences that need to be drawn from the data sets also depend upon the user as there is no criterion for good clustering. Clustering itself can be categorized into two types. Hard Clustering and Soft Clustering. In hard clustering, one data point can belong to one cluster only. But in soft clustering, the output provided is a probability likelihood of a data point belonging to each of the pre-defined numbers of clusters. Here are several examples of different types of clustering methods: Density-Based Clustering, Hierarchical Clustering, Fuzzy Clustering, Grid-Based Clustering, and so on. In this project, we will mainly focus on three on them: Hierarchical Clustering, Model-Based Clustering, and Density-Based Clustering. 
+It depends on the type of algorithm we use which decides how the clusters will be created. The inferences that need to be drawn from the data sets also depend upon the user as there is no criterion for good clustering. Clustering itself can be categorized into two types. Hard Clustering and Soft Clustering. In hard clustering, one data point can belong to one cluster only. But in soft clustering, the output provided is a probability likelihood of a data point belonging to each of the pre-defined numbers of clusters. Here are several examples of different types of clustering methods: Density-Based Clustering, Hierarchical Clustering, Fuzzy Clustering, Grid-Based Clustering, and so on. In this project, we will mainly focus on three on them: Hierarchical Clustering, Model-Based Clustering, and Density-Based Clustering.
 
 The data set we are going to use in three clustering methods is a country-level data set that includes 167 unique country observations. The variables included in the data set are child_mort (Death of children under 5 years of age per 1000 live births), exports (Exports of goods and services per capital. Given as %age of the GDP per capital), health (Total health spending per capital. Given as %age of GDP per capital), imports (Imports of goods and services per capital. Given as %age of the GDP per capital), income (Net income per person), inflation (The measurement of the annual growth rate of the Total GDP), life_expec (The average number of years a new born child would live if the current mortality patterns are to remain the same), total_fer (The number of children that would be born to each woman if the current age-fertility rates remain the same), gdpp (The GDP per capital. Calculated as the Total GDP divided by the total population.) Since there is no labelled output, and all the predictor variables are quantitative so that we could compute the distance between each observation and therefore we could use clustering methods to analyze this data set.
-
 
 **Objective:** We want to categorize countries using socio-economic and health factors that determine the overall development of each country (from the [Kaggle description](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)).
 
@@ -282,7 +280,7 @@ Clusters are not necessarily strict boundaries -- for example, if a point is fur
 
 <br>
 
-<center>![Image by [Mario Castro](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-gaussian.png){width="357"}</center>
+<center>![Image by Mario Castro](../img/mb-cluster-gaussian.png){width="357"}</center>
 
 </br>
 
@@ -308,7 +306,7 @@ Below is a table containing all of the possible types of clusters. The identifie
 
 <br>
 
-<center>![Image by [Mario Castro](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-models-table.png){width="453"}</center>
+<center>![Image by Mario Castro](../img/mb-cluster-models-table.png){width="453"}</center>
 
 </br>
 
@@ -316,7 +314,7 @@ Here are some visuals to accompany the table above.
 
 <br>
 
-<center>![Image by [Scrucca et al. (2016)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5096736/)](../img/mb-cluster-models-visual.jpeg){width="495"}</center>
+<center>![Image by Scrucca et al. (2016)](../img/mb-cluster-models-visual.jpeg){width="495"}</center>
 
 </br>
 
@@ -336,8 +334,7 @@ Having more parameters tends to produce more flexible models that fit the model 
 
 However, we usually want to explain the data by using as few parameters as possible -- this is called the principle of parsimony. Having too many parameters can also risk overfitting the data, which may not generalize well to new data. As a result, we penalize models with more parameters. In math terms, we have a larger $k$, which makes the first term $k \ln{(n)}$ bigger, which in turn increases the BIC.
 
-Then why do we maximize the BIC here? It turns out that in [the paper (p. 54)](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) associated with the `mclust` package (which we use to run this algorithm), the BIC is roughly defined as
-$$\text{BIC} = 2 \ln{(\hat{L})} - k \ln{(n)}$$
+Then why do we maximize the BIC here? It turns out that in [the paper (p. 54)](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) associated with the `mclust` package (which we use to run this algorithm), the BIC is roughly defined as $$\text{BIC} = 2 \ln{(\hat{L})} - k \ln{(n)}$$
 
 This is essentially taking the negative of our BIC equation from earlier, hence why the algorithm tries to maximize the BIC rather than minimizing it.
 
@@ -387,35 +384,36 @@ mb$classification %>%
   plot_map()
 ```
 
-
 # Density-based clustering
-[https://developers.google.com/machine-learning/clustering/clustering-algorithms
-https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/]
+
+[<https://developers.google.com/machine-learning/clustering/clustering-algorithms> <https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/>]
+
 Unlike the other two algorithms that mainly derive from the how computer calculated the clusters, the basic idea behind the density-based clustering approach is derived from a human intuitive clustering method. It means that the results of clustering calculated from a density-based method would be similar to how people classify the clusters through graphs only based on their eyes. For example, looking at the figure below, it is easity for us to identify the different clusters only based on our eyes because of the various dense regions of points on the graph.
-[image]
+
+![](images/dbscan-idea-01.png)
 
 ## DBSCAN algorithm
-DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach.It does use the idea of density reachability and density connectivity. The data is partitioned into groups with similar characteristics or clusters but it does not require specifying the number of those groups in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
-[https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/]
+
+DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach.It does use the idea of density reachability and density connectivity. The data is partitioned into groups with similar characteristics or clusters but it does not require specifying the number of those groups in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise. [<https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/>]
 
 ## Important concepts
+
 Two required parameters in the DBSCAN algorithm are:
 
-- *eps (Epsilon)*
-- *MinPts*
+-   *eps (Epsilon)*
+-   *MinPts*
 
 By changing the above two hyperparameter, the result of clustering may be varied.
 
 Other important terms to understand how DBSCAN works are:
 
-- *Core points*
-- *Border points*
-- *Noise/ Ourliers*
+-   *Core points*
+-   *Border points*
+-   *Noise/ Ourliers*
 
-[image]
+![](images/dbscan-concept.png)
 
-## Choosing the best model
-
+## Choosing the best hyperparameters
 
 ```{r}
 #install.packages("fpc")
@@ -425,12 +423,13 @@ library("fpc")
 library("factoextra")
 ```
 
-### Elbow Method
+### Choosing eps: **Elbow Method**
 
-To determin the best value of eps, or epsilon level, the "Elbow Method" should be applied here. According to the k-distance graph down below, on the y-axis, we plot the average distances and the x-axis are all the data points in the dataset.
-[https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31]
+To determin the best value of eps, or epsilon level, the "Elbow Method" should be applied here. According to the k-distance graph down below, on the y-axis, we plot the average distances and the x-axis are all the data points in the dataset. [<https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31>]
 
 To find the best epsilon value, we trying to find a 'knee' in the graph. And for here, the eps value should be between 2 and 4.
+
+### Choosing MinPts
 
 ```{r}
 scale.df <- df %>% scale()
@@ -439,7 +438,10 @@ kNNdistplot(df.matrix, k=10)
 abline(h=2.5, col="red")
 ```
 
+## Map Clusters
+
 ### eps = 4, MinPts = 5
+
 ```{r}
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 4, MinPts = 5)
@@ -483,6 +485,7 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 ```
 
 ### Check PCA
+
 ```{r}
 # check PCA
 pr.out <- prcomp(scale.df,
@@ -492,10 +495,8 @@ pr.out <- prcomp(scale.df,
 plot(pr.out$x[,1], pr.out$x[,2],
      xlab = 'PC1', ylab = 'PC2')
 ```
-[PCA got a dense single group may be why we only got one cluster in DBscan.
-ref: https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set]
 
-## Map clusters
+[PCA got a dense single group may be why we only got one cluster in DBscan. ref: <https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set>]
 
 ```{r, out.width='150%'}
 # add country names to clusters
@@ -510,32 +511,39 @@ db_clust %>%
 ```
 
 # Results and Anlysis
-Firstly, let us look at the map clusters of Hierarchical clustering. According to the results with 2 clusters, 3 clusters, and 4 clusters, we observe that there is no significant change when we add up the number of clusters each time. Since the number of clusters are given by the optimization methods above, it shows that 2, 3, or 4 clusters will give us the best clustering results, we will not continue adding up the number of clusters over 4. Therefore, we might decide that k=2 is the optimal number of clusters we want to analyze in Hierarchical clustering. 
 
-Focusing on the map clusters k=2 of Hierarchical clustering, we could easily find that the result mainly split the map into two regions: a large part of African countries with some countries in middle east (red region), and the rest of the world (blue region). Here are some examples of the countries in red region: Niger, Chad, South Africa, Nigeria, Iraq, Liberia, Afghan, etc., and some examples of the countries in blue region: Canada, the United States, Australia, India, and so on. According to the data set and the information searched online, we find that the countries in the red region has the same properties: very high child_mort, low income, low gdpp, very high total_fer, relatively low life-exp, and so on. Compared to those countries in red region,, we observe an obvious difference of those properties of the countries in blue region: generally speaking, countries in blue region have relatively better socio-economic and health conditions. It is worth mentioning that, we find that total_fer is an especially important indicator affecting the clustering results in this case. We could observe some countries in the blue region also have relatively weak socio-economic condition, like India (Income=4410, child_mort=58.8,gdpp=1350). However, those countries with weak socio-economic condition in the blue region always have relatively low total_fer, compared to pretty high average level of total_fer of the countries in red region. 
+Firstly, let us look at the map clusters of Hierarchical clustering. According to the results with 2 clusters, 3 clusters, and 4 clusters, we observe that there is no significant change when we add up the number of clusters each time. Since the number of clusters are given by the optimization methods above, it shows that 2, 3, or 4 clusters will give us the best clustering results, we will not continue adding up the number of clusters over 4. Therefore, we might decide that k=2 is the optimal number of clusters we want to analyze in Hierarchical clustering.
 
-In this case, we could infer that the 2 clusters Hierarchical clustering performs well in dividing the countries into two types: Stage 1 country (red region), and Stage 2-5 country (blue region). The classification method here is known as Demographic Transition Model Stages, which is widely accepted in the social sciences because of the well-established historical correlation linking dropping fertility to social and economic development. The stage 1 country shows generally a pre-industrial society in which both birth and death rates are quite high. Birth rates and death rates are effectively in balance. The lack of food availability as well as adequate medical care or effective sanitation and hygiene means the population does not grow very much due to disease and starvation. Therefore, we conclude that Hierarchical clustering perform well in stably categorizing countries into two levels with pretty good interpretation. 
-Now, looking at the Model-Based clustering with the best model of k=6. We could easily observe that Model-Based clustering perform much better than Hierarchical clustering in categorizing countries into more levels when we are adding up the number of clusters, since several regions are distinctly divided on the map. 
-# References
+Focusing on the map clusters k=2 of Hierarchical clustering, we could easily find that the result mainly split the map into two regions: a large part of African countries with some countries in middle east (red region), and the rest of the world (blue region). Here are some examples of the countries in red region: Niger, Chad, South Africa, Nigeria, Iraq, Liberia, Afghan, etc., and some examples of the countries in blue region: Canada, the United States, Australia, India, and so on. According to the data set and the information searched online, we find that the countries in the red region has the same properties: very high child_mort, low income, low gdpp, very high total_fer, relatively low life-exp, and so on. Compared to those countries in red region,, we observe an obvious difference of those properties of the countries in blue region: generally speaking, countries in blue region have relatively better socio-economic and health conditions. It is worth mentioning that, we find that total_fer is an especially important indicator affecting the clustering results in this case. We could observe some countries in the blue region also have relatively weak socio-economic condition, like India (Income=4410, child_mort=58.8,gdpp=1350). However, those countries with weak socio-economic condition in the blue region always have relatively low total_fer, compared to pretty high average level of total_fer of the countries in red region.
+
+In this case, we could infer that the 2 clusters Hierarchical clustering performs well in dividing the countries into two types: Stage 1 country (red region), and Stage 2-5 country (blue region). The classification method here is known as Demographic Transition Model Stages, which is widely accepted in the social sciences because of the well-established historical correlation linking dropping fertility to social and economic development. The stage 1 country shows generally a pre-industrial society in which both birth and death rates are quite high. Birth rates and death rates are effectively in balance. The lack of food availability as well as adequate medical care or effective sanitation and hygiene means the population does not grow very much due to disease and starvation. Therefore, we conclude that Hierarchical clustering perform well in stably categorizing countries into two levels with pretty good interpretation. Now, looking at the Model-Based clustering with the best model of k=6. We could easily observe that Model-Based clustering perform much better than Hierarchical clustering in categorizing countries into more levels when we are adding up the number of clusters, since several regions are distinctly divided on the map. \# References
 
 -   Dataset
+
     -   [Country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
+
 -   Hierarchical clustering
+
     -   [ISLR textbook](https://trevorhastie.github.io/ISLR/ISLR%20Seventh%20Printing.pdf)
     -   [Using the `hclust()` function](https://r-charts.com/part-whole/hclust/)
     -   [Customization for `hclust()`](https://stackoverflow.com/questions/55207216/r-rect-hclust-rectangles-too-high-in-dendogram)
     -   [Determining the optimal number of clusters](https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/)
     -   [Using the `fviz_nbclust()` and `fviz_gap_stat()` functions](https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html)
+
 -   Model-based clustering
+
     -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
     -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
     -   [Paper for the `mclust` package](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)
+
 -   Density-based clustering
 
 -   Analysis
+
     -   [The Demographic Transition Model](https://www.intelligenteconomist.com/demographic-transition-model/)
-```{r, include=FALSE}
-# To put just code in our R script (runs every time this document is knit):
-knitr::purl(input = 'clustering-countries.Rmd', 
-            output = 'clustering-countries.R')
-```
+
+    ```{r, include=FALSE}
+    # To put just code in our R script (runs every time this document is knit):
+    knitr::purl(input = 'clustering-countries.Rmd', 
+                output = 'clustering-countries.R')
+    ```
