@@ -37,7 +37,7 @@ For further references on the clustering methods mentioned in this report there 
     -   [Paper for the `mclust` package](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)
 
 -   Density-based clustering
-
+    -   [Density-based clustering: https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/how-density-based-clustering-works.htm]
 -   Analysis
 
     -   [The Demographic Transition Model](https://www.intelligenteconomist.com/demographic-transition-model/)
