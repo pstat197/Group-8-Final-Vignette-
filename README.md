@@ -18,4 +18,27 @@ For our topic we are specializing on three different types of clustering methods
 # References
 For further references on the clustering methods mentioned in this report there are many websites and textbooks that provide extensive information on these topics and here are a few that we accessed to help us:
 
-- [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
+-   Dataset
+
+    -   [Country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
+
+-   Hierarchical clustering
+
+    -   [ISLR textbook](https://trevorhastie.github.io/ISLR/ISLR%20Seventh%20Printing.pdf)
+    -   [Using the `hclust()` function](https://r-charts.com/part-whole/hclust/)
+    -   [Customization for `hclust()`](https://stackoverflow.com/questions/55207216/r-rect-hclust-rectangles-too-high-in-dendogram)
+    -   [Determining the optimal number of clusters](https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/)
+    -   [Using the `fviz_nbclust()` and `fviz_gap_stat()` functions](https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html)
+
+-   Model-based clustering
+
+    -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
+    -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
+    -   [Paper for the `mclust` package](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)
+
+-   Density-based clustering
+
+-   Analysis
+
+    -   [The Demographic Transition Model](https://www.intelligenteconomist.com/demographic-transition-model/)
+

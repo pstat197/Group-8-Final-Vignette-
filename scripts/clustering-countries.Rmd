@@ -17,7 +17,6 @@ pre code, pre, code {
 }
 </style>
 ```
-
 ```{r, include=FALSE}
 # set code chunk options
 knitr::opts_chunk$set(echo = TRUE, 
@@ -30,12 +29,11 @@ options(width = 200)
 
 # Introduction
 
-Clustering is a type of unsupervised learning method of machine learning. In the unsupervised learning method, the inferences are drawn from the data sets which do not contain labelled output variable. It is an exploratory data analysis technique that allows us to analyze the multivariate data sets. More specifically, clustering is a task of dividing the data sets into a certain number of clusters in such a manner that the data points belonging to a cluster have similar characteristics. It is done to segregate the groups with similar traits such that the distance between the data points within the clusters is minimal. In other words, the clusters are regions where the density of similar data points is high. It is generally used for the analysis of the data set, to find insightful data among huge data sets and draw inferences from it. 
+Clustering is a type of unsupervised learning method of machine learning. In the unsupervised learning method, the inferences are drawn from the data sets which do not contain labelled output variable. It is an exploratory data analysis technique that allows us to analyze the multivariate data sets. More specifically, clustering is a task of dividing the data sets into a certain number of clusters in such a manner that the data points belonging to a cluster have similar characteristics. It is done to segregate the groups with similar traits such that the distance between the data points within the clusters is minimal. In other words, the clusters are regions where the density of similar data points is high. It is generally used for the analysis of the data set, to find insightful data among huge data sets and draw inferences from it.
 
-It depends on the type of algorithm we use which decides how the clusters will be created. The inferences that need to be drawn from the data sets also depend upon the user as there is no criterion for good clustering. Clustering itself can be categorized into two types. Hard Clustering and Soft Clustering. In hard clustering, one data point can belong to one cluster only. But in soft clustering, the output provided is a probability likelihood of a data point belonging to each of the pre-defined numbers of clusters. Here are several examples of different types of clustering methods: Density-Based Clustering, Hierarchical Clustering, Fuzzy Clustering, Grid-Based Clustering, and so on. In this project, we will mainly focus on three on them: Hierarchical Clustering, Model-Based Clustering, and Density-Based Clustering. 
+It depends on the type of algorithm we use which decides how the clusters will be created. The inferences that need to be drawn from the data sets also depend upon the user as there is no criterion for good clustering. Clustering itself can be categorized into two types. Hard Clustering and Soft Clustering. In hard clustering, one data point can belong to one cluster only. But in soft clustering, the output provided is a probability likelihood of a data point belonging to each of the pre-defined numbers of clusters. Here are several examples of different types of clustering methods: Density-Based Clustering, Hierarchical Clustering, Fuzzy Clustering, Grid-Based Clustering, and so on. In this project, we will mainly focus on three on them: Hierarchical Clustering, Model-Based Clustering, and Density-Based Clustering.
 
 The data set we are going to use in three clustering methods is a country-level data set that includes 167 unique country observations. The variables included in the data set are child_mort (Death of children under 5 years of age per 1000 live births), exports (Exports of goods and services per capital. Given as %age of the GDP per capital), health (Total health spending per capital. Given as %age of GDP per capital), imports (Imports of goods and services per capital. Given as %age of the GDP per capital), income (Net income per person), inflation (The measurement of the annual growth rate of the Total GDP), life_expec (The average number of years a new born child would live if the current mortality patterns are to remain the same), total_fer (The number of children that would be born to each woman if the current age-fertility rates remain the same), gdpp (The GDP per capital. Calculated as the Total GDP divided by the total population.) Since there is no labelled output, and all the predictor variables are quantitative so that we could compute the distance between each observation and therefore we could use clustering methods to analyze this data set.
-
 
 **Objective:** We want to categorize countries using socio-economic and health factors that determine the overall development of each country (from the [Kaggle description](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)).
 
@@ -63,17 +61,18 @@ head(df)
 
 # Hierarchical clustering
 
-In hierarchical clustering, we use the Euclidean distance as our similarity measure between each observation (in this case, the countries in our dataset).
+In hierarchical clustering, we use the Euclidean distance as our similarity measure between each observation (in this case, the countries in our data set). The Euclidean distance is the most common distance measure used when the variables are continuous. This value is a non negative measure that calculated the distance between two points. This distance is quantified based upon the Pythagoras Theorem. Here we also performed a scaling of our data in order to ensure that the scale of each variable is the same. This is done before we look at the optimal number of clusters. 
 
-[either add link to or explain Euclidean distance, also add scaling part here]
+At the beginning of hierarchical clustering all objects start as an individual cluster and are joined with a linkage method. The linkages works by calculating either the differences or similarities among the objects. The two objects that are closest together are linked together and form a cluster. This linkage process is repeated, forming clusters until there is only one cluster left. There are many linkage methods one can use such as `Single Linkage`, `Complete Linkage`, `Centroid Linkage`, `Average Linkage`, and `Ward's Linkage` among others. One of the most common is Single Linkage, this method finds the two clusters with the closest minimum distance. Single linkage can result in extended, trailing
+clusters in which single observations are fused one-at-a-time.It will repeat until there is a single cluster left. The linkage method we used was Complete Linkage which is also another common method. This method finds the two clusters with the closest maximum distance and merges them together. In this case it records the largest of the dissimilarity values. Again this process is repeated until there is a single cluster left. 
+
+Since we don't specify the number of clusters we want beforehand, like in K-means clustering, we produce a dendrogram which is an upside down tree like structure that represents the observations. In this diagram we are able to observe the clusterings for each possible number of clusters from 1 to n. A dendrogram is seen as an advantage over K-means clustering because we can see how each possible clusters affects the data as opposed to specifying the number of clusters at the beginning and having to tune. In practice one can select an appropriate number of clusters for the data by just analyzing the dendrogram and based on the heights of the fusion and the number of clusters desired.
 
 ## Optimal number of clusters {.tabset}
 
 [Unlike $k$-means clustering, we don't have to specify the number of clusters beforehand. But then how many clusters should we use?]
 
-[Describe what the `fviz_nbclust()` function does]
-
-[Maybe try to describe these sections better? Especially gap statistic]
+Determining the optimal number of clusters is subjective and heavily depends on which method is used for measuring the similarities and parameters.To determine the optimal number of clusters to use we used the `fviz_nbclust()` function which determines and visualizes the optimal number using a variety of methods. These include the within cluster sums of squares(elbow method), average silhouette, and gap statistics. Each method will give its optimal number of clusters to use. 
 
 [See [here](https://towardsdatascience.com/how-many-clusters-6b3f220f0ef5)]
 
@@ -92,7 +91,8 @@ fviz_nbclust(df,
 ```
 
 ### Average silhouette method
-
+-   Compute clustering algorithm for different values of k, then calculate the average silhouette of observations for        each k
+-   The maximum location in the plotted curve is considered as the appropriate number of clusters
 -   Determines how well each object lies within its cluster
 -   Higher average silhouette = better
 
@@ -282,7 +282,7 @@ Clusters are not necessarily strict boundaries -- for example, if a point is fur
 
 <br>
 
-<center>![Image by [Mario Castro](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-gaussian.png){width="357"}</center>
+<center>![Image by Mario Castro](../img/mb-cluster-gaussian.png){width="357"}</center>
 
 </br>
 
@@ -308,7 +308,7 @@ Below is a table containing all of the possible types of clusters. The identifie
 
 <br>
 
-<center>![Image by [Mario Castro](https://youtu.be/h7RVeO-P3zc)](../img/mb-cluster-models-table.png){width="453"}</center>
+<center>![Image by Mario Castro](../img/mb-cluster-models-table.png){width="453"}</center>
 
 </br>
 
@@ -316,7 +316,7 @@ Here are some visuals to accompany the table above.
 
 <br>
 
-<center>![Image by [Scrucca et al. (2016)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5096736/)](../img/mb-cluster-models-visual.jpeg){width="495"}</center>
+<center>![Image by Scrucca et al. (2016)](../img/mb-cluster-models-visual.jpeg){width="495"}</center>
 
 </br>
 
@@ -336,8 +336,7 @@ Having more parameters tends to produce more flexible models that fit the model 
 
 However, we usually want to explain the data by using as few parameters as possible -- this is called the principle of parsimony. Having too many parameters can also risk overfitting the data, which may not generalize well to new data. As a result, we penalize models with more parameters. In math terms, we have a larger $k$, which makes the first term $k \ln{(n)}$ bigger, which in turn increases the BIC.
 
-Then why do we maximize the BIC here? It turns out that in [the paper (p. 54)](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) associated with the `mclust` package (which we use to run this algorithm), the BIC is roughly defined as
-$$\text{BIC} = 2 \ln{(\hat{L})} - k \ln{(n)}$$
+Then why do we maximize the BIC here? It turns out that in [the paper (p. 54)](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf) associated with the `mclust` package (which we use to run this algorithm), the BIC is roughly defined as $$\text{BIC} = 2 \ln{(\hat{L})} - k \ln{(n)}$$
 
 This is essentially taking the negative of our BIC equation from earlier, hence why the algorithm tries to maximize the BIC rather than minimizing it.
 
@@ -389,44 +388,84 @@ mb$classification %>%
 
 # Density-based clustering
 
-[Add info here]
+[<https://developers.google.com/machine-learning/clustering/clustering-algorithms> <https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/>]
 
-## Choosing the best model
+Unlike the other two algorithms that mainly derive from the how computer calculated the clusters, the basic idea behind the density-based clustering approach is derived from a human intuitive clustering method. It means that the results of clustering calculated from a density-based method would be similar to how people classify the clusters through graphs only based on their eyes. For example, looking at the figure below, it is easy for us to identify the different clusters only based on our eyes because of the various dense regions of points on the graph.
 
-[Need to change `abline()` part since now the dataframe is scaled]
+![](images/dbscan-idea-01.png)
+
+## DBSCAN algorithm
+
+DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach. The idea it uses are density reachability and connectivity. The data would be divided into clusters with similar characteristics. However, unlike the hierarchical clustering, the number of clusters do not needed to be specified in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
+
+[<https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/>]
+
+## Important concepts
+
+![](images/dbscan-concept.png)
+
+Two required parameters in the DBSCAN algorithm are:
+
+[<https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31>
+
+<http://www.sefidian.com/2020/12/18/how-to-determine-epsilon-and-minpts-parameters-of-dbscan-clustering/>]
+
+-   *eps* : Eps stands for "Epsilon", which stands for the maximum radius of the neighborhood or the clusters, and is shown as the blue line in the above figure. The data points will be included in the clusters if their mutual distance is less than or equal to the value of epsilon. For the DBSCAN algorithm, larger eps will create broader clusters, which contains more data points; smaller eps will narrow clusters, which contains less data points. However, if eps is chosen too small for the dataset, a large part of the data points would be considered as the noise points and not be included in the clusters; if eps is chosen too large for the dataset, clusters will be merged and the majority of the data points will be included in one same cluster.
+
+-   *MinPts*: MinPts stands for "the minimum number of data points contains within the radius of a neighborhood" to be considered as a cluster, which is the value of 4 in the above figure. In the DBSCAN algorithm, the value MinPts should be at least 3 to be used as a valid value. A smaller value of MinPts used, more clusters and more outliers will be produced; a larger value of MinPts used, more robust clusters will be created.
+
+By changing the above two hyperparameter, the result of clustering may be varied.
+
+Other important terms to understand how DBSCAN works are:
+
+[<https://www.dominodatalab.com/blog/topology-and-density-based-clustering>]
+
+-   *Core points*: 
+-   *Border points*:
+-   *Noise points/ Outliers*:
+
 
 ```{r}
-install.packages("fpc")
-install.packages("dbscan")
-install.packages("factoextra")
+#install.packages("fpc")
+#install.packages("dbscan")
+#install.packages("factoextra")
 ```
+
+### Determining eps: Elbow Method
+[https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31]
+
+In the DBSCAN algorithm, the best eps value is commonly found with a k-distance graph, where the value of k should equal to the value of MinPts. For this graph, x-axis contains all data points in the dataset and y-axis stands for the average distances of the data points. The best eps may chosen by looking at the elbow of the k-distance line. For example, after scaling our data, it plots a k-distance graph with a k value of 5 below. From this plot, if we choose MinPts equal to 5, the value of eps should be between 2 to 4.
 
 ```{r}
 scale.df <- df %>% scale()
 df.matrix <- as.matrix(scale.df)
-kNNdistplot(df.matrix, k=10)
+kNNdistplot(df.matrix, k=5)
 abline(h=2.5, col="red")
 ```
-### eps = 4, MinPts = 5
-```{r}
-library("fpc")
-set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 5, MinPts = 6)
-db
 
-library("factoextra")
+### Determining MinPts
+- Approach 1: 
+- Approach 2: 
+
+## Map clusters
+
+### eps = 0.5, MinPts = 18
+
+```{r}
+set.seed(1)
+db <- fpc::dbscan(scale.df, eps = 0.5, MinPts = 18)
+
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
+
 ### eps = 3, MinPts = 5
 
 ```{r}
-library("fpc")
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 3, MinPts = 5)
+db <- dbscan(scale.df, eps = 3, MinPts = 5)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
@@ -435,11 +474,9 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 ### eps = 6, MinPts = 5
 
 ```{r}
-library("fpc")
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 6, MinPts = 5)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
@@ -448,17 +485,16 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 ### eps = 3, MinPts = 10
 
 ```{r}
-library("fpc")
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 3, MinPts = 10)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
 
 ### Check PCA
+
 ```{r}
 # check PCA
 pr.out <- prcomp(scale.df,
@@ -468,10 +504,8 @@ pr.out <- prcomp(scale.df,
 plot(pr.out$x[,1], pr.out$x[,2],
      xlab = 'PC1', ylab = 'PC2')
 ```
-[PCA got a dense single group may be why we only got one cluster in DBscan.
-ref: https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set]
 
-## Map clusters
+[PCA got a dense single group may be why we only got one cluster in DBscan. ref: <https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set>]
 
 ```{r, out.width='150%'}
 # add country names to clusters
@@ -486,26 +520,9 @@ db_clust %>%
 ```
 
 
-# References
 
--   Dataset
-    -   [Country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
--   Hierarchical clustering
-    -   [ISLR textbook](https://trevorhastie.github.io/ISLR/ISLR%20Seventh%20Printing.pdf)
-    -   [Using the `hclust()` function](https://r-charts.com/part-whole/hclust/)
-    -   [Customization for `hclust()`](https://stackoverflow.com/questions/55207216/r-rect-hclust-rectangles-too-high-in-dendogram)
-    -   [Determining the optimal number of clusters](https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/)
-    -   [Using the `fviz_nbclust()` and `fviz_gap_stat()` functions](https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html)
--   Model-based clustering
-    -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
-    -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
-    -   [Paper for the `mclust` package](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)
--   Density-based clustering
-
--   Analysis
-    -   [The Demographic Transition Model](https://www.intelligenteconomist.com/demographic-transition-model/)
-```{r, include=FALSE}
-# To put just code in our R script (runs every time this document is knit):
-knitr::purl(input = 'clustering-countries.Rmd', 
-            output = 'clustering-countries.R')
-```
+    ```{r, include=FALSE}
+    # To put just code in our R script (runs every time this document is knit):
+    knitr::purl(input = 'clustering-countries.Rmd', 
+                output = 'clustering-countries.R')
+    ```
