@@ -444,7 +444,9 @@ abline(h=2.5, col="red")
 ```
 
 ### Determining MinPts
-- Approach 1: 
+[http://www.sefidian.com/2020/12/18/how-to-determine-epsilon-and-minpts-parameters-of-dbscan-clustering/]
+
+- Approach 1: According to a rule of thumb, the best value of MinPts can be determined by the value of the number of dimensions D in the data set, which means that ${MinPts}\geq\text{D} + 1$ 
 - Approach 2: 
 
 ## Map clusters
@@ -464,9 +466,9 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 
 ```{r}
 set.seed(1)
-db <- dbscan(scale.df, eps = 3, MinPts = 5)
+db1 <- dbscan(scale.df, eps = 3, MinPts = 5)
 
-fviz_cluster(db, data = scale.df, stand = FALSE,
+fviz_cluster(db1, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
@@ -509,7 +511,7 @@ plot(pr.out$x[,1], pr.out$x[,2],
 
 ```{r, out.width='150%'}
 # add country names to clusters
-db_clust <- db$cluster
+db_clust <- db1$cluster
 names(db_clust) <- row.names(df)
 
 # plot map clusters
