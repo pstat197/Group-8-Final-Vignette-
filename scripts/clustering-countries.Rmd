@@ -488,6 +488,8 @@ db_clust %>%
 # Results and Anlysis
 Firstly, let us look at the map clusters of Hierarchical clustering. According to the results with 2 clusters, 3 clusters, and 4 clusters, we observe that there is no significant change when we add up the number of clusters each time. Since the number of clusters are given by the optimization methods above, it shows that 2, 3, or 4 clusters will give us the best clustering results, we will not continue adding up the number of clusters over 4. Therefore, we might decide that k=2 is the optimal number of clusters we want to analyze in Hierarchical clustering. 
 
+Focusing on the map clusters k=2 of Hierarchical clustering, we could easily find that the result mainly split the map into two regions: a large part of African countries with some countries in middle east (red region), and the rest of the world (blue region). Here are some examples of the countries in red region: Niger, Chad, South Africa, Nigeria, Iraq, Tajikistan, Afghan, etc., and some examples of the countries in blue region: Canada, the United States, Australia, and so on. 
+
 # References
 
 -   Dataset
