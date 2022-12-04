@@ -400,14 +400,18 @@ DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a c
 
 ## Important concepts
 Two required parameters in the DBSCAN algorithm are:
-- eps (Epsilon)
-- MinPts
+
+- *eps (Epsilon)*
+- *MinPts*
+
 By changing the above two hyperparameter, the result of clustering may be varied.
 
 Other important terms to understand how DBSCAN works are:
-- Core points
-- Border points
-- Noise/ Ourliers
+
+- *Core points*
+- *Border points*
+- *Noise/ Ourliers*
+
 [image]
 
 ## Choosing the best model
@@ -425,6 +429,7 @@ library("factoextra")
 
 To determin the best value of eps, or epsilon level, the "Elbow Method" should be applied here. According to the k-distance graph down below, on the y-axis, we plot the average distances and the x-axis are all the data points in the dataset.
 [https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31]
+
 To find the best epsilon value, we trying to find a 'knee' in the graph. And for here, the eps value should be between 2 and 4.
 
 ```{r}
