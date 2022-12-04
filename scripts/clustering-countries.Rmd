@@ -399,12 +399,16 @@ DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a c
 [https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/]
 
 ## Important concepts
+Two required parameters in the DBSCAN algorithm are:
 - eps (Epsilon)
 - MinPts
+By changing the above two hyperparameter, the result of clustering may be varied.
 
+Other important terms to understand how DBSCAN works are:
 - Core points
 - Border points
 - Noise/ Ourliers
+[image]
 
 ## Choosing the best model
 
