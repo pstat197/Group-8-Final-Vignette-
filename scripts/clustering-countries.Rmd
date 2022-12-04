@@ -399,7 +399,12 @@ DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a c
 [https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/]
 
 ## Important concepts
+- eps (Epsilon)
+- MinPts
 
+- Core points
+- Border points
+- Noise/ Ourliers
 
 ## Choosing the best model
 
