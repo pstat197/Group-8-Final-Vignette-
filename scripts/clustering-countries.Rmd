@@ -398,9 +398,11 @@ Unlike the other two algorithms that mainly derive from the how computer calcula
 DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach.It does use the idea of density reachability and density connectivity. The data is partitioned into groups with similar characteristics or clusters but it does not require specifying the number of those groups in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
 [https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/]
 
+## Important concepts
+
+
 ## Choosing the best model
 
-[Need to change `abline()` part since now the dataframe is scaled]
 
 ```{r}
 #install.packages("fpc")
@@ -410,10 +412,17 @@ library("fpc")
 library("factoextra")
 ```
 
+### Elbow Method
+
+To determin the best value of eps, or epsilon level, the "Elbow Method" should be applied here. According to the k-distance graph down below, on the y-axis, we plot the average distances and the x-axis are all the data points in the dataset.
+[https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31]
+To find the best epsilon value, we trying to find a 'knee' in the graph. And for here, the eps value should be between 2 and 4.
+
 ```{r}
 scale.df <- df %>% scale()
-df.matrix <- as.matrix(scale.df)
-kNNdistplot(df.matrix, k=10)
+dist <- scale.df %>% dist()
+df.matrix <- as.matrix(dist)
+kNNdistplot(dist, k=10)
 abline(h=2.5, col="red")
 ```
 
