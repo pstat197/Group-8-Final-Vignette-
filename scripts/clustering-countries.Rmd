@@ -439,7 +439,6 @@ abline(h=2.5, col="red")
 ```{r}
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 4, MinPts = 5)
-db
 
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
