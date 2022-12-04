@@ -387,18 +387,25 @@ mb$classification %>%
   plot_map()
 ```
 
-# Density-based clustering
 
-[Add info here]
+# Density-based clustering
+[https://developers.google.com/machine-learning/clustering/clustering-algorithms
+https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/]
+Unlike the other two algorithms that mainly derive from the how computer calculated the clusters, the basic idea behind the density-based clustering approach is derived from a human intuitive clustering method. It means that the results of clustering calculated from a density-based method would be similar to how people classify the clusters through graphs only based on their eyes. For example, looking at the figure below, it is easity for us to identify the different clusters only based on our eyes because of the various dense regions of points on the graph.
+[image]
+
+## DBscan algorithm
 
 ## Choosing the best model
 
 [Need to change `abline()` part since now the dataframe is scaled]
 
 ```{r}
-install.packages("fpc")
-install.packages("dbscan")
-install.packages("factoextra")
+#install.packages("fpc")
+#install.packages("dbscan")
+#install.packages("factoextra")
+library("fpc")
+library("factoextra")
 ```
 
 ```{r}
@@ -407,26 +414,24 @@ df.matrix <- as.matrix(scale.df)
 kNNdistplot(df.matrix, k=10)
 abline(h=2.5, col="red")
 ```
+
 ### eps = 4, MinPts = 5
 ```{r}
-library("fpc")
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 5, MinPts = 6)
+db <- fpc::dbscan(scale.df, eps = 4, MinPts = 5)
 db
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
+
 ### eps = 3, MinPts = 5
 
 ```{r}
-library("fpc")
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 3, MinPts = 5)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
@@ -435,11 +440,9 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 ### eps = 6, MinPts = 5
 
 ```{r}
-library("fpc")
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 6, MinPts = 5)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
@@ -448,11 +451,9 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 ### eps = 3, MinPts = 10
 
 ```{r}
-library("fpc")
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 3, MinPts = 10)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
