@@ -394,7 +394,9 @@ https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/
 Unlike the other two algorithms that mainly derive from the how computer calculated the clusters, the basic idea behind the density-based clustering approach is derived from a human intuitive clustering method. It means that the results of clustering calculated from a density-based method would be similar to how people classify the clusters through graphs only based on their eyes. For example, looking at the figure below, it is easity for us to identify the different clusters only based on our eyes because of the various dense regions of points on the graph.
 [image]
 
-## DBscan algorithm
+## DBSCAN algorithm
+DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach.It does use the idea of density reachability and density connectivity. The data is partitioned into groups with similar characteristics or clusters but it does not require specifying the number of those groups in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
+[https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/]
 
 ## Choosing the best model
 
