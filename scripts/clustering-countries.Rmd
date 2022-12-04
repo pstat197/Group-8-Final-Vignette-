@@ -433,13 +433,14 @@ Other important terms to understand how DBSCAN works are:
 ```
 
 ### Determining eps: Elbow Method
+[https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31]
 
- In the DBSCAN algorithm, the best eps value is commonly found with a k-distance graph
+In the DBSCAN algorithm, the best eps value is commonly found with a k-distance graph, where the value of k should equal to the value of MinPts. For this graph, x-axis contains all data points in the dataset and y-axis stands for the average distances of the data points. The best eps may chosen by looking at the elbow of the k-distance line. For example, after scaling our data, it plots a k-distance graph with a k value of 5 below. From this plot, if we choose MinPts equal to 5, the value of eps should be between 2 to 4.
 
 ```{r}
 scale.df <- df %>% scale()
 df.matrix <- as.matrix(scale.df)
-kNNdistplot(df.matrix, k=10)
+kNNdistplot(df.matrix, k=5)
 abline(h=2.5, col="red")
 ```
 
