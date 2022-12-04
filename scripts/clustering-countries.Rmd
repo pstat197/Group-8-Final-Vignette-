@@ -72,9 +72,7 @@ Since we don't specify the number of clusters we want beforehand, like in K-mean
 
 [Unlike $k$-means clustering, we don't have to specify the number of clusters beforehand. But then how many clusters should we use?]
 
-[Describe what the `fviz_nbclust()` function does]
-
-[Maybe try to describe these sections better? Especially gap statistic]
+Determining the optimal number of clusters is subjective and heavily depends on which method is used for measuring the similarities and parameters.To determine the optimal number of clusters to use we used the `fviz_nbclust()` function which determines and visualizes the optimal number using a variety of methods. These include the within cluster sums of squares(elbow method), average silhouette, and gap statistics. Each method will give its optimal number of clusters to use. 
 
 [See [here](https://towardsdatascience.com/how-many-clusters-6b3f220f0ef5)]
 
@@ -93,7 +91,8 @@ fviz_nbclust(df,
 ```
 
 ### Average silhouette method
-
+-   Compute clustering algorithm for different values of k, then calculate the average silhouette of observations for        each k
+-   The maximum location in the plotted curve is considered as the appropriate number of clusters
 -   Determines how well each object lies within its cluster
 -   Higher average silhouette = better
 
