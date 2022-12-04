@@ -389,16 +389,50 @@ mb$classification %>%
 
 # Density-based clustering
 
+<<<<<<< Updated upstream
 [Add info here]
 
 ## Choosing the best model
+=======
+[<https://developers.google.com/machine-learning/clustering/clustering-algorithms> <https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/>]
 
-[Need to change `abline()` part since now the dataframe is scaled]
+Unlike the other two algorithms that mainly derive from the how computer calculated the clusters, the basic idea behind the density-based clustering approach is derived from a human intuitive clustering method. It means that the results of clustering calculated from a density-based method would be similar to how people classify the clusters through graphs only based on their eyes. For example, looking at the figure below, it is easy for us to identify the different clusters only based on our eyes because of the various dense regions of points on the graph.
+
+![](images/dbscan-idea-01.png)
+
+## DBSCAN algorithm
+
+DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach. The idea it uses are density reachability and connectivity. The data would be divided into clusters with similar characteristics. However, unlike the hierarchical clustering, the number of clusters do not needed to be specified in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
+
+[<https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/>]
+
+## Important concepts
+
+
+
+Two required parameters in the DBSCAN algorithm are:
+
+-   *eps (Epsilon)*: 
+-   *MinPts*
+
+By changing the above two hyperparameter, the result of clustering may be varied.
+
+Other important terms to understand how DBSCAN works are:
+
+[<https://www.dominodatalab.com/blog/topology-and-density-based-clustering>]
+
+-   *Core points*
+-   *Border points*
+-   *Noise/ Ourliers*
+
+
+
+## Map clusters
 
 ```{r}
-install.packages("fpc")
-install.packages("dbscan")
-install.packages("factoextra")
+#install.packages("fpc")
+#install.packages("dbscan")
+#install.packages("factoextra")
 ```
 
 ```{r}
@@ -407,26 +441,22 @@ df.matrix <- as.matrix(scale.df)
 kNNdistplot(df.matrix, k=10)
 abline(h=2.5, col="red")
 ```
-### eps = 4, MinPts = 5
+### eps = 0.5, MinPts = 18
 ```{r}
-library("fpc")
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 5, MinPts = 6)
-db
+db <- fpc::dbscan(scale.df, eps = 0.5, MinPts = 18)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
+
 ### eps = 3, MinPts = 5
 
 ```{r}
-library("fpc")
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 3, MinPts = 5)
+db <- dbscan(scale.df, eps = 3, MinPts = 5)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
@@ -435,11 +465,9 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 ### eps = 6, MinPts = 5
 
 ```{r}
-library("fpc")
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 6, MinPts = 5)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
@@ -448,11 +476,9 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 ### eps = 3, MinPts = 10
 
 ```{r}
-library("fpc")
 set.seed(1)
 db <- fpc::dbscan(scale.df, eps = 3, MinPts = 10)
 
-library("factoextra")
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
