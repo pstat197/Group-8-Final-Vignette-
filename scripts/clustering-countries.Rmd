@@ -37,9 +37,6 @@ It depends on the type of algorithm we use which decides how the clusters will b
 The data set we are going to use in three clustering methods is a country-level data set that includes 167 unique country observations. The variables included in the data set are child_mort (Death of children under 5 years of age per 1000 live births), exports (Exports of goods and services per capital. Given as %age of the GDP per capital), health (Total health spending per capital. Given as %age of GDP per capital), imports (Imports of goods and services per capital. Given as %age of the GDP per capital), income (Net income per person), inflation (The measurement of the annual growth rate of the Total GDP), life_expec (The average number of years a new born child would live if the current mortality patterns are to remain the same), total_fer (The number of children that would be born to each woman if the current age-fertility rates remain the same), gdpp (The GDP per capital. Calculated as the Total GDP divided by the total population.) Since there is no labelled output, and all the predictor variables are quantitative so that we could compute the distance between each observation and therefore we could use clustering methods to analyze this data set.
 
 
-
-
-
 **Objective:** We want to categorize countries using socio-economic and health factors that determine the overall development of each country (from the [Kaggle description](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)).
 
 We load in the necessary packages and the [country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data).
@@ -487,6 +484,9 @@ db_clust %>%
   rename_countries() %>%
   plot_map()
 ```
+
+# Results and Anlysis
+Firstly, let us look at the map clusters of Hierarchical clustering. According to the results with 2 clusters, 3 clusters, and 4 clusters, we observe that there is no significant change when we add up the number of clusters each time. Since the number of clusters are given by the optimization methods above, it shows that 2, 3, or 4 clusters will give us the best clustering results, we will not continue adding up the number of clusters over 4. Therefore, we might decide that k=2 is the optimal number of clusters we want to analyze in Hierarchical clustering. 
 
 # References
 
