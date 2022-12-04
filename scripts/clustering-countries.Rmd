@@ -30,7 +30,7 @@ options(width = 200)
 
 # Introduction
 
-[Introduce dataset and why unsupervised learning would be helpful here, also describe what clustering is]
+Clustering is a type of unsupervised learning method of machine learning. In the unsupervised learning method, the inferences are drawn from the data sets which do not contain labelled output variable. It is an exploratory data analysis technique that allows us to analyze the multivariate data sets. More specifically, clustering is a task of dividing the data sets into a certain number of clusters in such a manner that the data points belonging to a cluster have similar characteristics. It is done to segregate the groups with similar traits such that the distance between the data points within the clusters is minimal.
 
 **Objective:** We want to categorize countries using socio-economic and health factors that determine the overall development of each country (from the [Kaggle description](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)).
 
