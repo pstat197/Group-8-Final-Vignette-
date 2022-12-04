@@ -391,32 +391,82 @@ mb$classification %>%
 [Need to change `abline()` part since now the dataframe is scaled]
 
 ```{r}
+install.packages("fpc")
+install.packages("dbscan")
+install.packages("factoextra")
+```
+
+```{r}
 scale.df <- df %>% scale()
 df.matrix <- as.matrix(scale.df)
-kNNdistplot(df.matrix, k=6)
-abline(h=5000, col="red")
+kNNdistplot(df.matrix, k=10)
+abline(h=2.5, col="red")
 ```
+### eps = 4, MinPts = 5
+```{r}
+library("fpc")
+set.seed(1)
+db <- fpc::dbscan(scale.df, eps = 5, MinPts = 6)
+db
+
+library("factoextra")
+fviz_cluster(db, data = scale.df, stand = FALSE,
+             ellipse = FALSE, show.clust.cent = FALSE,
+             geom = "point",palette = "jco", ggtheme = theme_classic())
+```
+### eps = 3, MinPts = 5
 
 ```{r}
+library("fpc")
 set.seed(1)
-db <- dbscan(df, eps = 5000, minPts = 6)
-db
-summary(db)
+db <- fpc::dbscan(scale.df, eps = 3, MinPts = 5)
+
+library("factoextra")
+fviz_cluster(db, data = scale.df, stand = FALSE,
+             ellipse = FALSE, show.clust.cent = FALSE,
+             geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
+
+### eps = 6, MinPts = 5
+
+```{r}
+library("fpc")
+set.seed(1)
+db <- fpc::dbscan(scale.df, eps = 6, MinPts = 5)
+
+library("factoextra")
+fviz_cluster(db, data = scale.df, stand = FALSE,
+             ellipse = FALSE, show.clust.cent = FALSE,
+             geom = "point",palette = "jco", ggtheme = theme_classic())
+```
+
+### eps = 3, MinPts = 10
+
+```{r}
+library("fpc")
+set.seed(1)
+db <- fpc::dbscan(scale.df, eps = 3, MinPts = 10)
+
+library("factoextra")
+fviz_cluster(db, data = scale.df, stand = FALSE,
+             ellipse = FALSE, show.clust.cent = FALSE,
+             geom = "point",palette = "jco", ggtheme = theme_classic())
+```
+
+### Check PCA
+```{r}
+# check PCA
+pr.out <- prcomp(scale.df,
+                 scale =TRUE,
+                 center = TRUE)
+
+plot(pr.out$x[,1], pr.out$x[,2],
+     xlab = 'PC1', ylab = 'PC2')
+```
+[PCA got a dense single group may be why we only got one cluster in DBscan.
+ref: https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set]
 
 ## Map clusters
-
-```{r}
-fviz_cluster(db, df, geom = 'point')
-```
-
-```{r}
-hullplot(df.matrix, db$cluster)
-```
-
-```{r, include=FALSE}
-# plot(db, df, main = "DBScan")
-```
 
 ```{r, out.width='150%'}
 # add country names to clusters
