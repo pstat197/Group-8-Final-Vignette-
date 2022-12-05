@@ -250,6 +250,7 @@ setdiff(unique_countries_df, unique_countries_world)
 
 Use the tabs to choose between different numbers of clusters obtained from hierarchical clustering. Note that some countries are not included in this dataset (shaded in gray), such as Mexico and Greenland.
 
+From 2 clusters to 3 clusters there is a very small change that may not be noticeable at first glance. The method creates a separate cluster for the countries Malta, Luxembourg,and Singapore. Then when we go from 3 to 4 clusters the method makes Nigeria it's own cluster. 
 ### $k = 2$ clusters
 
 ```{r, out.width='150%'}
