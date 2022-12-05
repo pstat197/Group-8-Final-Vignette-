@@ -400,7 +400,7 @@ Unlike the other two algorithms that mainly derive from the how computer calcula
 
 ## DBSCAN algorithm
 
-DBSCAN, or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach. The idea it uses are density reachability and connectivity. The data would be divided into clusters with similar characteristics. However, unlike the hierarchical clustering, the number of clusters do not needed to be specified in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
+DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach. The idea it uses are density reachability and connectivity. The data would be divided into clusters with similar characteristics. However, unlike the hierarchical clustering, the number of clusters do not needed to be specified in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
 
 [<https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/>]
 
@@ -424,10 +424,11 @@ Other important terms to understand how DBSCAN works are:
 
 [<https://www.dominodatalab.com/blog/topology-and-density-based-clustering>]
 
--   *Core points*:
+-   *Core points*: 
 -   *Border points*:
 -   *Noise points/ Outliers*:
 
+## Determining best parameters
 ```{r}
 #install.packages("fpc")
 #install.packages("dbscan")
@@ -435,8 +436,7 @@ Other important terms to understand how DBSCAN works are:
 ```
 
 ### Determining eps: Elbow Method
-
-[<https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31>]
+[https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31]
 
 In the DBSCAN algorithm, the best eps value is commonly found with a k-distance graph, where the value of k should equal to the value of MinPts. For this graph, x-axis contains all data points in the dataset and y-axis stands for the average distances of the data points. The best eps may chosen by looking at the elbow of the k-distance line. For example, after scaling our data, it plots a k-distance graph with a k value of 5 below. From this plot, if we choose MinPts equal to 5, the value of eps should be between 2 to 4.
 
@@ -448,13 +448,12 @@ abline(h=2.5, col="red")
 ```
 
 ### Determining MinPts
+[http://www.sefidian.com/2020/12/18/how-to-determine-epsilon-and-minpts-parameters-of-dbscan-clustering/]
 
-[<http://www.sefidian.com/2020/12/18/how-to-determine-epsilon-and-minpts-parameters-of-dbscan-clustering/>]
+- Approach 1: According to a rule of thumb, the best value of MinPts can be determined by the value of the number of dimensions D in the data set, which means that ${MinPts}\geq\text{D} + 1$ 
+- Approach 2: 
 
--   Approach 1: According to a rule of thumb, the best value of MinPts can be determined by the value of the number of dimensions D in the data set, which means that ${MinPts}\geq\text{D} + 1$
--   Approach 2:
-
-## Map clusters
+## Map clusters {.tabset}
 
 ### eps = 0.5, MinPts = 18
 
@@ -500,7 +499,7 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
 
-### Check PCA
+## Check PCA
 
 ```{r}
 # check PCA

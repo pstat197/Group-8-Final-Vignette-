@@ -42,7 +42,7 @@ Other important terms to understand how DBSCAN works are:
 -   *Border points*:
 -   *Noise points/ Outliers*:
 
-
+## Determining best parameters
 ```{r}
 #install.packages("fpc")
 #install.packages("dbscan")
