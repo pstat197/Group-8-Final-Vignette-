@@ -37,7 +37,7 @@ The inferences that are drawn from the data are subjective as there is no criter
 
 Clustering can be categorized into two broad types. In hard clustering, one data point can belong to one cluster only. But in soft clustering, the output provided is a probability likelihood of a data point belonging to each of the pre-defined numbers of clusters. Here are several examples of different types of clustering methods: Density-Based Clustering, Hierarchical Clustering, Fuzzy Clustering, Grid-Based Clustering, and so on. In this project, we will mainly focus on three on them: Hierarchical Clustering, Model-Based Clustering, and Density-Based Clustering.
 
-To demonstrate these clustering methods, we will use a [country-level dataset]((https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)) that includes 167 unique observations, which means not every country is represented. The descriptions of the variables in this dataset are listed in the codebook, which can be found in `data/codebook.csv`.
+To demonstrate these clustering methods, we will use a [country-level dataset]((https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)) that includes 167 unique observations, which means not every country is represented. The descriptions of the variables in this dataset are listed in the codebook, which can be found in `data/data-dictionary.csv`.
 
 In our analysis, we will use `country` as the row names. Since there is no labelled response and all of the other predictors are qualitative, then we can compute the distances between observations. This allows us to use clustering methods to analyze this dataset.
 
@@ -396,7 +396,7 @@ mb$classification %>%
 
 Unlike the other two algorithms that mainly derive from the how computer calculated the clusters, the basic idea behind the [density-based clustering approach](https://developers.google.com/machine-learning/clustering/clustering-algorithms) is derived from a human intuitive clustering method. It means that the results of clustering calculated from a density-based method would be similar to how people classify the clusters through graphs only based on their eyes. For example, looking at the figure below, it is easy for us to identify the different clusters only based on our eyes because of the various dense regions of points on the graph.
 
-[![](images/dbscan-idea-01.png)](https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/)
+[![](../img/dbscan-idea.png)](https://www.datanovia.com/en/lessons/dbscan-density-based-clustering-essentials/)
 
 ## DBSCAN algorithm
 
@@ -404,7 +404,7 @@ Unlike the other two algorithms that mainly derive from the how computer calcula
 
 ## Important concepts
 
-[![](images/dbscan-concept.png)](https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31)
+[![](../img/dbscan-concept.png)](https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31)
 
 Two required parameters in the DBSCAN algorithm are:
 
