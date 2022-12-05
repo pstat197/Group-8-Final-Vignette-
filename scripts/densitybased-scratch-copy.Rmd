@@ -73,7 +73,7 @@ abline(h=2.5, col="red")
 
 -   Approach 2: Under the most cases which we do not know the domain knowledge, we can also find the best value of MinPts by $ln(n)$, where n is the number of points that needed to be clustered. For our data set, the n should be 167 and the MinPts should be 5 or 6 with this approach.
 
-## Map clusters
+## Tuning parameters {.tabset}
 
 ### eps = 3, MinPts = 18
 
@@ -127,7 +127,9 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 
 *For this plot, as eps becomes smaller, more clusters exists. However, most of data points also be excluded from those clusters and become noise points.*
 
-After comparing the results of different combinations of eps and MinPts, we decided to use the one with eps = 3 and MinPts = 5 as our final parameter combination.\*
+## Final combination: eps = 3, MinPts = 5
+
+After comparing the results of different combinations of eps and MinPts, we decided to use the one with eps = 3 and MinPts = 5 as our final parameter combination.
 
 ## Check PCA
 
@@ -146,6 +148,8 @@ plot(pr.out$x[,1], pr.out$x[,2],
 After checking the PCA plot, it is easy to see that PCA plot also got a dense single group on the graph, which may be the reason why we only got one single cluster in DBSCAN.
 
 [<https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set>]
+
+## Map clusters
 
 ```{r, out.width='150%'}
 # add country names to clusters

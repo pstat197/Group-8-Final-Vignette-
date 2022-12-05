@@ -224,18 +224,18 @@ abline(h=2.5, col="red")
 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 0.5, MinPts = 18)
+db <- fpc::dbscan(scale.df, eps = 3, MinPts = 18)
 
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 
 
-## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+## ---- warning = FALSE---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 set.seed(1)
-db <- dbscan(scale.df, eps = 3, MinPts = 5)
+db1 <- dbscan(scale.df, eps = 3, MinPts = 5)
 
-fviz_cluster(db, data = scale.df, stand = FALSE,
+fviz_cluster(db1, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 
@@ -251,7 +251,7 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 3, MinPts = 10)
+db <- fpc::dbscan(scale.df, eps = 1, MinPts = 5)
 
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
@@ -270,7 +270,7 @@ plot(pr.out$x[,1], pr.out$x[,2],
 
 ## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # add country names to clusters
-db_clust <- db$cluster
+db_clust <- db1$cluster
 names(db_clust) <- row.names(df)
 
 # plot map clusters
