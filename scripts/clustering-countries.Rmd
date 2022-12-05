@@ -198,7 +198,7 @@ df %>%
 
 Between the dendrograms, there are some small changes that may not be noticeable at first glance.
 
-- From 2 clusters to 3 clusters, the method creates a separate cluster for Singapore, Malta, and Luxembourg (which are considered "rich" countries).
+- From 2 to 3 clusters, the method creates a separate cluster for Singapore, Malta, and Luxembourg (which are considered "rich" countries).
 - From 3 to 4 clusters, the method makes Nigeria its own cluster.
 - From 4 to 5 clusters, the method creates a bigger cluster containing countries like Japan, Australia, and the United States.
 
@@ -411,7 +411,7 @@ plot(mb, what = "BIC")
 
 ### Classification plots
 
-We can see how the points are classified for each pair of variables in the dataset using the chosen model and number of clusters.
+We can see how the points are classified for each pair of variables in the dataset using the chosen model and number of clusters. Different colored symbols represent different clusters.
 
 ```{r}
 # create classification plots
