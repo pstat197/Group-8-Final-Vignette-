@@ -213,9 +213,6 @@ mb$classification %>%
 #install.packages("fpc")
 #install.packages("dbscan")
 #install.packages("factoextra")
-
-
-## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 scale.df <- df %>% scale()
 df.matrix <- as.matrix(scale.df)
 kNNdistplot(df.matrix, k=5)
