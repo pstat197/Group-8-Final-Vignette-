@@ -15,12 +15,11 @@ library(factoextra)
 library(cluster)
 library(dendextend)
 library(mclust)
-library(dbscan)
 
 # read data
 countries <- read.csv("../data/country-data.csv")
 
-# use the countries as the row names
+# use countries as the row names
 df <- countries %>%
   column_to_rownames(var = "country")
 
@@ -29,27 +28,33 @@ head(df)
 
 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# best = 4 clusters (not much improvement after 4 clusters)
-fviz_nbclust(df, 
-             hcut, 
-             method = "wss")
+# scale the dataframe
+scaled.df <- df %>% scale()
+
+# run elbow method (best = 5 clusters)
+fviz_nbclust(scaled.df,
+             hcut,
+             method = "wss") +
+  # vertical dashed line at the optimal number of clusters
+  geom_vline(xintercept = 5, 
+             linetype = 2)
 
 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# best = 2 clusters
-fviz_nbclust(df, 
+# run average silhouette method (best = 2 clusters)
+fviz_nbclust(scaled.df, 
              hcut, 
              method = "silhouette")
 
 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 set.seed(123)
-gap_stat <- clusGap(df,
+gap_stat <- clusGap(scaled.df,
                     hcut,
                     K.max = 10, # number of clusters to consider
                     B = 500)    # number of samples to bootstrap
 
-# best = 3 clusters
+# run gap statistic method (best = 3 clusters)
 fviz_gap_stat(gap_stat)
 
 
@@ -86,6 +91,18 @@ df %>%
   set("labels_cex", 0.4) %>% # make the font size smaller
   color_branches(k = 4) %>%  # color the branches based on the 4 clusters
   color_labels(k = 4) %>%    # color the labels based on the 4 clusters
+  plot(horiz = TRUE)         # make the labels appear on the right
+
+
+## ---- fig.height=20-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+df %>%
+  scale() %>%                # scale and center the columns
+  dist() %>%                 # get the Euclidean distances between rows  
+  hclust() %>%               # apply hierarchical clustering
+  as.dendrogram() %>%        # turn the cluster output into a dendrogram
+  set("labels_cex", 0.4) %>% # make the font size smaller
+  color_branches(k = 5) %>%  # color the branches based on the 5 clusters
+  color_labels(k = 5) %>%    # color the labels based on the 5 clusters
   plot(horiz = TRUE)         # make the labels appear on the right
 
 
@@ -183,6 +200,14 @@ df %>%
   plot_map()
 
 
+## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+df %>%
+  k_hclust(5) %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
+
+
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # run model-based clustering algorithm
 mb <- Mclust(df)
@@ -204,6 +229,17 @@ plot(mb, what = "BIC")
 ## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # plot map clusters
 mb$classification %>%
+  clust_to_df() %>%
+  rename_countries() %>%
+  plot_map()
+
+
+## ---- out.width='150%'--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# run the algorithm
+mb2 <- Mclust(scaled.df)
+
+# plot map clusters
+mb2$classification %>%
   clust_to_df() %>%
   rename_countries() %>%
   plot_map()
