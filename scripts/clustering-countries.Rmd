@@ -1,10 +1,12 @@
 ---
 title: "Clustering Analysis on Country Data"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     code_folding: hide
-    toc: true
-    toc_float: true
+    toc: yes
+    toc_float: yes
 ---
 
 ```{=html}
@@ -400,7 +402,7 @@ Unlike the other two algorithms that mainly derive from the how computer calcula
 
 ## DBSCAN algorithm
 
-DBSCAN ,or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach. The idea it uses are density reachability and connectivity. The data would be divided into clusters with similar characteristics. However, unlike the hierarchical clustering, the number of clusters do not needed to be specified in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
+DBSCAN, or "Density-Based Spatial Clustering of Applications with Noise", is a commonly used unsupervised clustering Machine Learning algorithm for density-based clustering approach. The idea that uses are density reachability and connectivity. The data would be divided into clusters with similar characteristics. However, unlike the hierarchical clustering, the number of clusters do not needed to be specified in advance. A cluster is defined as a maximum set of densely connected points. It discovers clusters of arbitrary shapes in spatial databases with noise.
 
 [<https://www.geeksforgeeks.org/dbscan-clustering-in-r-programming/>]
 
@@ -422,13 +424,16 @@ By changing the above two hyperparameter, the result of clustering may be varied
 
 Other important terms to understand how DBSCAN works are:
 
-[<https://www.dominodatalab.com/blog/topology-and-density-based-clustering>]
+[<https://www.dominodatalab.com/blog/topology-and-density-based-clustering>] [<https://www.geeksforgeeks.org/dbscan-clustering-in-ml-density-based-clustering/>]
 
--   *Core points*: 
--   *Border points*:
--   *Noise points/ Outliers*:
+-   *Core points*: A point is a core point if it has more than MinPts points within eps, which is randomly selected in the algorithm and is the foundation of the clusters, which are the green points shown in the above figure.
+
+-   *Border points*: A point is included in the neighborhoods or the clusters that is not the core points, which are the red points shown in the above figure.
+
+-   *Noise points/ Outliers*: The points that are neither core points nor are they close enough to a cluster to be defined as border points. Noise points are not assigned to any clusters and sometimes may be considered as anomalous points in the dataset, which are the grey points shown in the above figure.
 
 ## Determining best parameters
+
 ```{r}
 #install.packages("fpc")
 #install.packages("dbscan")
@@ -436,7 +441,8 @@ Other important terms to understand how DBSCAN works are:
 ```
 
 ### Determining eps: Elbow Method
-[https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31]
+
+[<https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31>]
 
 In the DBSCAN algorithm, the best eps value is commonly found with a k-distance graph, where the value of k should equal to the value of MinPts. For this graph, x-axis contains all data points in the dataset and y-axis stands for the average distances of the data points. The best eps may chosen by looking at the elbow of the k-distance line. For example, after scaling our data, it plots a k-distance graph with a k value of 5 below. From this plot, if we choose MinPts equal to 5, the value of eps should be between 2 to 4.
 
@@ -448,27 +454,31 @@ abline(h=2.5, col="red")
 ```
 
 ### Determining MinPts
-[http://www.sefidian.com/2020/12/18/how-to-determine-epsilon-and-minpts-parameters-of-dbscan-clustering/]
 
-- Approach 1: According to a rule of thumb, the best value of MinPts can be determined by the value of the number of dimensions D in the data set, which means that ${MinPts}\geq\text{D} + 1$ 
-- Approach 2: 
+[<http://www.sefidian.com/2020/12/18/how-to-determine-epsilon-and-minpts-parameters-of-dbscan-clustering/> <https://stackoverflow.com/questions/12893492/choosing-eps-and-minpts-for-dbscan-r>]
 
-## Map clusters {.tabset}
+-   Approach 1: According to a rule of thumb, the best value of MinPts can be determined by the value of the number of dimensions D in the data set, which means that ${MinPts}\geq\text{D} + 1$. And in general, the value of MinPts should be ${MinPts} = \text{D} * 2$. For our data set, the dimensionality is 9 so the best MinPts should be 18 with this approach.
 
-### eps = 0.5, MinPts = 18
+-   Approach 2: Under the most cases which we do not know the domain knowledge, we can also find the best value of MinPts by $ln(n)$, where n is the number of points that needed to be clustered. For our data set, the n should be 167 and the MinPts should be 5 or 6 with this approach.
+
+## Map clusters
+
+### eps = 3, MinPts = 18
 
 ```{r}
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 0.5, MinPts = 18)
+db <- fpc::dbscan(scale.df, eps = 3, MinPts = 18)
 
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
 
+*For this plot, we select the value of MinPts based on the first approach, which produces only one cluster.*
+
 ### eps = 3, MinPts = 5
 
-```{r}
+```{r, warning = FALSE}
 set.seed(1)
 db1 <- dbscan(scale.df, eps = 3, MinPts = 5)
 
@@ -476,6 +486,8 @@ fviz_cluster(db1, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
+
+*For this plot, we select the value of MinPts based on the second approach, which produces only one cluster.*
 
 ### eps = 6, MinPts = 5
 
@@ -488,18 +500,26 @@ fviz_cluster(db, data = scale.df, stand = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
 
-### eps = 3, MinPts = 10
+*For this plot, as eps becomes larger, more noise points are also included in the cluster.*
+
+### eps = 1, MinPts = 5
 
 ```{r}
 set.seed(1)
-db <- fpc::dbscan(scale.df, eps = 3, MinPts = 10)
+db <- fpc::dbscan(scale.df, eps = 1, MinPts = 5)
 
 fviz_cluster(db, data = scale.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point",palette = "jco", ggtheme = theme_classic())
 ```
 
+*For this plot, as eps becomes smaller, more clusters exists. However, most of data points also be excluded from those clusters and become noise points.*
+
+After comparing the results of different combinations of eps and MinPts, we decided to use the one with eps = 3 and MinPts = 5 as our final parameter combination.\*
+
 ## Check PCA
+
+Since we only got one cluster for this algorithm, we can further use PCA to check if this cluster pattern is correct or not.
 
 ```{r}
 # check PCA
@@ -511,7 +531,9 @@ plot(pr.out$x[,1], pr.out$x[,2],
      xlab = 'PC1', ylab = 'PC2')
 ```
 
-[PCA got a dense single group may be why we only got one cluster in DBscan. ref: <https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set>]
+After checking the PCA plot, it is easy to see that PCA plot also got a dense single group on the graph, which may be the reason why we only got one single cluster in DBSCAN.
+
+[<https://stackoverflow.com/questions/48051800/why-dbscan-clustering-returns-single-cluster-on-movie-lens-data-set>]
 
 ```{r, out.width='150%'}
 # add country names to clusters
