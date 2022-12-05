@@ -400,6 +400,15 @@ mb <- Mclust(df)
 summary(mb)
 ```
 
+### BIC plot
+
+How did the algorithm choose the model? We can compare all of the models at different numbers of clusters. Higher BIC suggests a better model. (Spot the model that we got from running the algorithm!)
+
+```{r}
+# create BIC plot
+plot(mb, what = "BIC")
+```
+
 ### Classification plots
 
 We can see how the points are classified for each pair of variables in the dataset using the chosen model and number of clusters.
@@ -409,13 +418,43 @@ We can see how the points are classified for each pair of variables in the datas
 plot(mb, what = "classification")
 ```
 
-### BIC plot
-
-We can also compare all of the models at different numbers of clusters. Higher BIC suggests a better model.
+We can zoom in on a plot by specifying the row and column number in the `dimens` argument.
 
 ```{r}
-# create BIC plot
-plot(mb, what = "BIC")
+# classification plot of life_expec against health
+plot(mb, what = "classification", dimens = c(3, 7))
+```
+
+### Uncertainty plots
+
+We can account for the uncertainty of the classifications -- remember that if an observation is far from the center of its cluster, then it is less likely to be in that cluster. Bigger and darker circles represent more uncertainty for an observation.
+
+```{r}
+# create uncertainty plots
+plot(mb, what = "uncertainty")
+```
+
+Because there are so many plots, it is difficult to see where the uncertainty for each pair of variables generally lies. Again, we can use the `dimens` argument to zoom in on a plot.
+
+```{r}
+# uncertainty plot of life_expec against health
+plot(mb, what = "uncertainty", dimens = c(3, 7))
+```
+
+### Density plots
+
+To see the regions where more of the points are closer together, we can plot the estimated density. The code below creates a contour plot for each pair of variables in the dataset. The smaller inner circles represent the denser regions.
+
+```{r}
+# create density plots
+plot(mb, what = "density")
+```
+
+Let's zoom in on a plot again.
+
+```{r}
+# density plot of life_expec against health
+plot(mb, what = "density", dimens = c(3, 7))
 ```
 
 ## Map clusters
