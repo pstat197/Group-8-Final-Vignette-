@@ -194,7 +194,7 @@ df %>%
   plot(horiz = TRUE)         # make the labels appear on the right
 ```
 
-## {-}
+## {.unlisted .unnumbered}
 
 Between the dendrograms, there are some small changes that may not be noticeable at first glance.
 
@@ -546,7 +546,7 @@ fviz_cluster(db, data = scaled.df, stand = FALSE,
 
 *For this plot, as eps becomes smaller, more clusters exist. However, most of the data points are also excluded from those clusters and become noise points.*
 
-## {-}
+## {.unlisted .unnumbered}
 
 After comparing the results of different combinations of eps and MinPts, we decide to use the one with eps = 3 and MinPts = 5 as our final parameter combination.
 
