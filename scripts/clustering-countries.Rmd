@@ -553,9 +553,12 @@ abline(h = 2.5, col = "red")  # best value of eps
 ### eps = 3, MinPts = 18
 
 ```{r}
+# create cluster with maximum radius of 3 for the neighborhood 
+# with at least 18 points include in each cluster
 set.seed(1)
 db <- fpc::dbscan(scaled.df, eps = 3, MinPts = 18)
 
+# visualize the clustering results
 fviz_cluster(db, data = scaled.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point", palette = "jco", ggtheme = theme_classic())
@@ -566,9 +569,12 @@ fviz_cluster(db, data = scaled.df, stand = FALSE,
 ### eps = 3, MinPts = 5
 
 ```{r, warning = FALSE}
+# create cluster with maximum radius of 3 for the neighborhood 
+# with at least 5 points include in each cluster
 set.seed(1)
 db1 <- dbscan(scaled.df, eps = 3, MinPts = 5)
 
+# visualize the clustering results
 fviz_cluster(db1, data = scaled.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point", palette = "jco", ggtheme = theme_classic())
@@ -579,9 +585,12 @@ fviz_cluster(db1, data = scaled.df, stand = FALSE,
 ### eps = 6, MinPts = 5
 
 ```{r}
+# create cluster with maximum radius of 6 for the neighborhood 
+# with at least 5 points include in each cluster
 set.seed(1)
 db <- fpc::dbscan(scaled.df, eps = 6, MinPts = 5)
 
+# visualize the clustering result
 fviz_cluster(db, data = scaled.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point", palette = "jco", ggtheme = theme_classic())
@@ -592,9 +601,12 @@ fviz_cluster(db, data = scaled.df, stand = FALSE,
 ### eps = 1, MinPts = 5
 
 ```{r}
+# create cluster with maximum radius of 1 for the neighborhood 
+# with at least 5 points include in each cluster
 set.seed(1)
 db <- fpc::dbscan(scaled.df, eps = 1, MinPts = 5)
 
+# visualize the clustering result
 fviz_cluster(db, data = scaled.df, stand = FALSE,
              ellipse = FALSE, show.clust.cent = FALSE,
              geom = "point", palette = "jco", ggtheme = theme_classic())
