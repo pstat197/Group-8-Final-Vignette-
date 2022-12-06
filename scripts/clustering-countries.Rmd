@@ -46,6 +46,19 @@ In our analysis, we will use `country` to keep track of which countries are clas
 
 **Objective:** We want to categorize countries using socio-economic and health factors that determine the overall development of each country (from the Kaggle description).
 
+We first install the following packages -- just install the ones you do not have yet.
+
+```{r, eval=FALSE}
+# install packages
+install.packages('tidyverse')
+install.packages('factoextra')
+install.packages('cluster')
+install.packages('dendextend')
+install.packages('mclust')
+install.packages('dbscan')
+install.packages('fpc')
+```
+
 We load in the necessary packages and the country data below.
 
 ```{r, message=FALSE}
@@ -202,7 +215,7 @@ Between the dendrograms, there are some small changes that may not be noticeable
 - From 3 to 4 clusters, the method makes Nigeria its own cluster.
 - From 4 to 5 clusters, the method creates a bigger cluster containing countries like Japan, Australia, and the United States.
 
-## Map clusters {.tabset}
+## Mapping the clusters {.tabset}
 
 The dendrograms can be difficult to read since there are a lot of countries -- `r length(row.names(df))` in total! Luckily, since we are working with countries, we can also plot the clusters onto a world map. Below are some of the functions that we'll use to make our maps.
 
@@ -283,6 +296,7 @@ Use the tabs to choose between different numbers of clusters obtained from hiera
 ### $k = 2$ clusters
 
 ```{r, out.width='150%'}
+# plot 2 clusters onto the world map
 df %>%
   k_hclust(2) %>%
   clust_to_df() %>%
@@ -293,6 +307,7 @@ df %>%
 ### $k = 3$ clusters
 
 ```{r, out.width='150%'}
+# plot 3 clusters onto the world map
 df %>%
   k_hclust(3) %>%
   clust_to_df() %>%
@@ -303,6 +318,7 @@ df %>%
 ### $k = 4$ clusters
 
 ```{r, out.width='150%'}
+# plot 4 clusters onto the world map
 df %>%
   k_hclust(4) %>%
   clust_to_df() %>%
@@ -313,6 +329,7 @@ df %>%
 ### $k = 5$ clusters
 
 ```{r, out.width='150%'}
+# plot 5 clusters onto the world map
 df %>%
   k_hclust(5) %>%
   clust_to_df() %>%
@@ -457,12 +474,12 @@ Let's zoom in on a plot again.
 plot(mb, what = "density", dimens = c(3, 7))
 ```
 
-## Map clusters
+## Mapping the clusters
 
 Like before, we plot our clusters onto the world map. Notice that we have more clusters here than when we used hierachical clustering.
 
 ```{r, out.width='150%'}
-# plot map clusters
+# plot clusters onto the world map
 mb$classification %>%
   clust_to_df() %>%
   rename_countries() %>%
@@ -477,7 +494,7 @@ In the previous steps, we didn't scale the data. But how would the clusters chan
 # run the algorithm
 mb2 <- Mclust(scaled.df)
 
-# plot map clusters
+# plot clusters onto the world map
 mb2$classification %>%
   clust_to_df() %>%
   rename_countries() %>%
@@ -514,7 +531,7 @@ Other important terms to understand how DBSCAN works are:
 
 -   [*Noise points / Outliers*](https://www.geeksforgeeks.org/dbscan-clustering-in-ml-density-based-clustering/): The points that are neither core points nor are they close enough to a cluster to be defined as border points. Noise points are not assigned to any clusters and sometimes may be considered as anomalous points in the dataset, which are the grey points shown in the above figure.
 
-## Determining best parameters
+## Determining the best hyperparameters
 
 ### Determining eps: Elbow Method
 
@@ -531,7 +548,7 @@ abline(h = 2.5, col = "red")  # best value of eps
 
 -   [Approach 2](https://stackoverflow.com/questions/12893492/choosing-eps-and-minpts-for-dbscan-r): In most cases where we do not have domain knowledge, we can also find the best value of MinPts by $\ln{(n)}$, where $n$ is the number of points that needed to be clustered. For our dataset, $n$ should be 167 and the MinPts should be 5 or 6 with this approach.
 
-## Tuning hyperparameters {.tabset}
+## Tuning the hyperparameters {.tabset}
 
 ### eps = 3, MinPts = 18
 
@@ -589,7 +606,7 @@ fviz_cluster(db, data = scaled.df, stand = FALSE,
 
 After comparing the results of different combinations of eps and MinPts, we decide to use the one with eps = 3 and MinPts = 5 as our final parameter combination.
 
-## Check PCA
+## Checking PCA
 
 Since we only got one cluster for this algorithm, we can further use PCA (principal component analysis) to check if this cluster pattern is correct or not.
 
@@ -606,14 +623,14 @@ plot(pr.out$x[,1], pr.out$x[,2],
 
 After checking the [PCA plot](https://stackoverflow.com/a/63207694), it is easy to see that the PCA plot shows a dense single group on the graph, which may be the reason why we only got one single cluster in DBSCAN.
 
-## Map clusters
+## Mapping the clusters
 
 ```{r, out.width='150%'}
 # add country names to clusters
 db_clust <- db1$cluster
 names(db_clust) <- row.names(df)
 
-# plot map clusters
+# plot clusters onto the world map
 db_clust %>%
   clust_to_df() %>%
   rename_countries() %>%
