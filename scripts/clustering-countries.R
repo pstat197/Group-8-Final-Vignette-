@@ -365,7 +365,7 @@ db_clust %>%
 
 
 ## ---- include=FALSE---------------------------------------------------------------------------
-# To put just code in our R script (runs every time this document is knit):
+# put just code in our R script
 knitr::purl(input = 'clustering-countries.Rmd', 
             output = 'clustering-countries.R')
 
