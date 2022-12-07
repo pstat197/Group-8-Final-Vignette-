@@ -2,11 +2,9 @@
 title: "Clustering Analysis on Country Data"
 output:
   html_document:
-    code_folding: hide
+    code_folding: show
     toc: yes
     toc_float: yes
-  pdf_document:
-    toc: yes
 ---
 
 ```{=html}
@@ -32,7 +30,7 @@ options(width = 200)
 
 # Introduction
 
-In unsupervised learning methods, inferences are drawn from data that do not contain a labeled output variable. These techniques allow us to analyze multivariate data sets and find interesting relationships between observations. **Clustering** is a type of unsupervised machine learning method that involves dividing the data set into a certain number of groups/clusters (denoted by $k$) in such a manner that the data points belonging to a cluster have similar characteristics. The clusters are regions where the density of similar data points is high. As a result, the distances between the data points within each cluster is minimal.
+In unsupervised learning methods, inferences are drawn from data that do not contain a labeled output variable. These techniques allow us to analyze multivariate data sets and find interesting relationships between observations. **Clustering** is a type of unsupervised machine learning method that involves dividing the data set into a certain number of groups/clusters (denoted by $k$) in such a manner that the data points belonging to a cluster have similar characteristics. The clusters are regions where the density of similar data points is high. As a result, the distance between data points in a cluster is minimal.
 
 The inferences that are drawn from the data are subjective as there is no universal criterion for "good" clustering. The type of algorithm we use determines how the clusters will be created. In this vignette, we will mainly focus on three specific types:
 
@@ -90,7 +88,7 @@ In hierarchical clustering, we use the Euclidean distance as our similarity meas
 
 <summary>**When do we need to scale our data?**</summary>
 
-It depends on your data. If the data is already on the same scale or it doesn't make sense to scale the data (e.g. latitude and longitude), then scaling isn't necessary. If your data has different ranges, consider scaling it. It never hurts to compared the scaled and unscaled data -- we show an example of this in the [model-based clustering section](#model-based-clustering).
+It depends on your data. If the data is already on the same scale or it doesn't make sense to scale the data (e.g. latitude and longitude), then scaling isn't necessary. If the data has different ranges for some variables (e.g. in our data set, `health` and `income` are measured in different units and thus have different ranges), consider scaling it. It never hurts to compared the scaled and unscaled data -- we show an example of this in the [model-based clustering section](#model-based-clustering).
 
 </details>
 
@@ -527,7 +525,7 @@ Unlike the other two algorithms that is mainly derived from how the computer cal
 
 Two required parameters in the DBSCAN algorithm are:
 
--   [*eps*](https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31) : Eps stands for "Epsilon", which stands for the maximum radius of the neighborhood or the clusters, and is shown as the blue line in the above figure. The data points will be included in the clusters if their mutual distance is less than or equal to the value of epsilon. For the DBSCAN algorithm, larger eps will create broader clusters, which contains more data points; smaller eps will narrow clusters, which contains less data points. However, if the chosen eps is too small for the data set, a large part of the data points would be considered as the noise points and will not be included in the clusters; if the chosen eps is too large for the data set, clusters will be merged and the majority of the data points will be included in the same cluster.
+-   [*eps*](https://towardsdatascience.com/explaining-dbscan-clustering-18eaf5c83b31): Eps stands for "Epsilon", which stands for the maximum radius of the neighborhood or the clusters, and is shown as the blue line in the above figure. The data points will be included in the clusters if their mutual distance is less than or equal to the value of epsilon. For the DBSCAN algorithm, larger eps will create broader clusters, which contains more data points; smaller eps will narrow clusters, which contains less data points. However, if the chosen eps is too small for the data set, a large part of the data points would be considered as the noise points and will not be included in the clusters; if the chosen eps is too large for the data set, clusters will be merged and the majority of the data points will be included in the same cluster.
 
 -   [*MinPts*](http://www.sefidian.com/2020/12/18/how-to-determine-epsilon-and-minpts-parameters-of-dbscan-clustering/): MinPts stands for "the minimum number of data points contained within the radius of a neighborhood" to be considered as a cluster, which is the value of 4 in the above figure. In the DBSCAN algorithm, the value MinPts should be at least 3 to be used as a valid value. If a smaller value of MinPts is used, more clusters and more outliers will be produced; if a larger value of MinPts is used, more robust clusters will be created.
 
@@ -646,6 +644,8 @@ plot(pr.out$x[,1], pr.out$x[,2],
 After checking the [PCA plot](https://stackoverflow.com/a/63207694), it is easy to see that the PCA plot shows a dense single group on the graph, which may be the reason why we only got one single cluster in DBSCAN.
 
 ## Mapping the clusters
+
+We plot the clusters obtained from the DBSCAN algorithm onto the world map.
 
 ```{r, out.width='150%'}
 # add country names to clusters
