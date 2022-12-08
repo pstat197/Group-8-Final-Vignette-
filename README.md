@@ -30,7 +30,7 @@ For further references on the clustering methods mentioned in this vignette, the
 
 -   Data set
 
-    -   [[Data] "Unsupervised Learning on Country Data | Kaggle"](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
+    -   [[Data] "Unsupervised Learning on Country Data" | Kaggle](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
 
 -   Hierarchical clustering
 
