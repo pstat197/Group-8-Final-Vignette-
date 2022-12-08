@@ -309,7 +309,7 @@ fviz_cluster(db, data = scaled.df, stand = FALSE,
 # create cluster with maximum radius of 3 for the neighborhood 
 # with at least 5 points include in each cluster
 set.seed(1)
-db1 <- dbscan(scaled.df, eps = 3, MinPts = 5)
+db1 <- fpc::dbscan(scaled.df, eps = 3, MinPts = 5)
 
 # visualize the clustering results
 fviz_cluster(db1, data = scaled.df, stand = FALSE,
@@ -366,6 +366,6 @@ db_clust %>%
 
 ## ---- include=FALSE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # put just code in our R script
-knitr::purl(input = 'clustering-countries-vignette.Rmd', 
+knitr::purl(input = 'vignette-clustering-countries.Rmd', 
             output = 'scripts/clustering-countries-script.R')
 
