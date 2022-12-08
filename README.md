@@ -1,4 +1,4 @@
-# Vignette-clustering-methods
+# vignette-clustering-methods
 
 Vignette on implementing clustering methods (hierarchical, model-based, density-based) using unlabeled country data; created as a class project for PSTAT197A in Fall 2022.
 
@@ -30,7 +30,7 @@ For further references on the clustering methods mentioned in this vignette, the
 
 -   Data set
 
-    -   [[Data] "Unsupervised Learning on Country Data"](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
+    -   [[Data] "Unsupervised Learning on Country Data | Kaggle"](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
 
 -   Hierarchical clustering
 
