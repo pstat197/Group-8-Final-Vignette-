@@ -1,44 +1,54 @@
 # Vignette-clustering-methods
 
-This is a vignette focused on 3 clustering methods in R: hierarchical clustering, distribution-based clustering, and density-based clustering. They will be illustrated on an unsupervised country classification data.
+Vignette on implementing clustering methods (hierarchical, model-based, density-based) using unlabeled country data; created as a class project for PSTAT197A in Fall 2022.
 
-# Contributors 
+# Contributors
+
 KunXiao Gao, Justin Liu, Ruoxin Wang, Kassandra Trejo 
 
 # Vignette Abstract
-For our topic we are specializing on three different types of clustering methods. But first let's look at what clustering is. Clustering refers to partitioning our observations from our data set into distinct groups that are similar to each other. In hierarchical clustering the main principle is that every object is connected to its neighbors depending on their distance.It is represented in a dendrogram which is an upside down tree. In density based clustering or model based methods the data is clustered based on density and not distance like in the hierarchical method. Lastly we decided to also use distribution based clustering method. This method uses an entirely different metric, probability. In this method the data is grouped based on the likelihood of belonging to the same probability distribution. We decided to utilize an unsupervised country classification data set where we implemented hierarchical clustering, density and distributional based clustering. We found that using 3 clusters in our hierarchical method provided the best results. 
-# Repository Contents 
-`scripts` folder includes our script and markdown files with our code and visualizations.
 
-`img` folder includes images and png documents that we utilized in our vignette.
+Clustering refers to the idea of partitioning observations from a data set into distinct groups without being given the labels beforehand. As an unsupervised learning technique, the goal of clustering is not to generate predictions but rather to draw inferences from the data. For our topic, we specialized in three different types of clustering methods. In hierarchical clustering, the distance between observations determines which cluster each observation falls into -- we use the Euclidean distance as our metric. In model-based clustering, clusters are formed based on a probability distribution -- we demonstrate this using Gaussian mixture models. In density-based clustering, the data is grouped in areas where many points are close together -- we use DBSCAN to illustrate this. Unlike model-based clustering, density-based clustering is a non-parametric method since it does not assume that the points come from a predetermined probability distribution. We implemented these 3 methods to perform unsupervised classification on an unlabeled country data set. Overall, we found that model-based clustering gave us the most detailed clusters while still maintaining a good level of interpretability.
 
-`data` folder includes our raw country data that we downloaded from Kaggle as well as our processed and clean data.
+# Repository Contents
 
+The vignette files (`vignette.Rmd` and `vignette.html`) can be found in the root directory of this repository.
+
+The `data` folder includes the raw country data set used in the vignette (`country-data.csv`) and its corresponding codebook (`data-dictionary.csv`), both of which were downloaded from [Kaggle](https://www.kaggle.com/).
+
+The `scripts` folder includes a script containing all of the code from the vignette (`vignette-script.R`) as well as a `drafts` subfolder containing any drafts of our code.
+
+The `img` folder includes images that we utilized in our vignette.
+
+# Instructions
+
+Clone the repository or download it as a ZIP file. Once it is on your local machine, simply click on `vignette.html` to view the vignette in your web browser.
 
 # References
-For further references on the clustering methods mentioned in this report there are many websites and textbooks that provide extensive information on these topics and here are a few that we accessed to help us:
 
--   Dataset
+For further references on the clustering methods mentioned in this vignette, there are many websites and textbooks that provide extensive information on these topics. Here are a few that we accessed to help us:
 
-    -   [Country data](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
+-   Data set
+
+    -   [[Data] "Unsupervised Learning on Country Data"](https://www.kaggle.com/datasets/rohan0301/unsupervised-learning-on-country-data)
 
 -   Hierarchical clustering
 
-    -   [ISLR textbook](https://trevorhastie.github.io/ISLR/ISLR%20Seventh%20Printing.pdf)
-    -   [Using the `hclust()` function](https://r-charts.com/part-whole/hclust/)
-    -   [Customization for `hclust()`](https://stackoverflow.com/questions/55207216/r-rect-hclust-rectangles-too-high-in-dendogram)
-    -   [Determining the optimal number of clusters](https://www.datanovia.com/en/lessons/determining-the-optimal-number-of-clusters-3-must-know-methods/)
-    -   [Using the `fviz_nbclust()` and `fviz_gap_stat()` functions](https://rpkgs.datanovia.com/factoextra/reference/fviz_nbclust.html)
+    -   [[Textbook] *An Introduction to Statistical Learning*, Chapter 10.3.2 ](https://link.springer.com/book/10.1007/978-1-4614-7138-7)
+    -   [[Article] "How Many Clusters?" | Satoru Hayasaka](https://towardsdatascience.com/how-many-clusters-6b3f220f0ef5)
 
 -   Model-based clustering
 
-    -   [Model-based clustering and Gaussian mixture model in R](https://en.proft.me/2017/02/1/model-based-clustering-r/)
-    -   [Model-based clustering: an introduction to Gaussian Mixture Models (video)](https://youtu.be/h7RVeO-P3zc)
-    -   [Paper for the `mclust` package](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)
+    -   [[Article] "Model-based clustering and Gaussian mixture model in R" | Ivan Morgun](https://en.proft.me/2017/02/1/model-based-clustering-r/)
+    -   [[Video] "Model-base clustering: an introduction to Gaussian Mixture Models" | Mario Castro](https://youtu.be/h7RVeO-P3zc)
+    -   [[Paper] Description of the `mclust` package](https://stat.uw.edu/sites/default/files/files/reports/2012/tr597.pdf)
 
 -   Density-based clustering
-    -   [Density-based clustering: https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/how-density-based-clustering-works.htm]
+
+    -   [[Article] "How Density-based Clustering works" | ArcGIS Pro](https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-statistics/how-density-based-clustering-works.htm)
+    -   [[Video] "DBSCAN" | StatQuest](https://youtu.be/RDZUdRSDOok)
+    -   [[Forum] "Estimating/Choosing optimal Hyperparameters for DBSCAN" | Stack Overflow](https://stackoverflow.com/questions/15050389/estimating-choosing-optimal-hyperparameters-for-dbscan)
+
 -   Analysis
 
-    -   [The Demographic Transition Model](https://www.intelligenteconomist.com/demographic-transition-model/)
-
+    -   [[Article] "The Demographic Transition Model" | Prateek Agarwal](https://www.intelligenteconomist.com/demographic-transition-model/)
