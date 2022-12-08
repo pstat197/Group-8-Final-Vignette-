@@ -367,5 +367,5 @@ db_clust %>%
 ## ---- include=FALSE-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # put just code in our R script
 knitr::purl(input = 'vignette-clustering-countries.Rmd', 
-            output = 'scripts/clustering-countries-script.R')
+            output = 'scripts/script-clustering-countries.R')
 
