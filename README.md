@@ -12,7 +12,7 @@ Clustering refers to the idea of partitioning observations from a data set into 
 
 # Repository Contents
 
-The vignette files (`vignette.Rmd` and `vignette.html`) can be found in the root directory of this repository.
+The vignette files (`vignette.Rmd` and `vignette.html`) can be found in the root directory of this repository. The `vignette-clustering-methods.Rproj` file opens the R project and sets the working directory.
 
 The `data` folder includes the raw country data set used in the vignette (`country-data.csv`) and its corresponding codebook (`data-dictionary.csv`), both of which were downloaded from [Kaggle](https://www.kaggle.com/).
 
@@ -22,7 +22,7 @@ The `img` folder includes images that we utilized in our vignette.
 
 # Instructions
 
-Clone the repository or download it as a ZIP file. Once it is on your local machine, simply click on `vignette.html` to view the vignette in your web browser.
+Clone the repository or download it as a ZIP file. Once it is on your local machine, simply click on `vignette.html` to view the vignette in your web browser. To run the code in `vignette.Rmd` and `scripts/vignette-script.R`, click on `vignette-clustering-methods.Rproj` beforehand to set the working directory.
 
 # References
 
